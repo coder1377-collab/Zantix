@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Zantix - Community</title>
+  <meta name="description" content="Anonymous Zantix community stories, questions, replies, and support.">
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
+    <a class="logo" href="index.html" style="text-decoration: none;">Zan<span>tix</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-home-link">Home</a></li>
+      <li><a href="community.html" class="active">Community</a></li>
+      <li><a href="mood-tracker.html">Mood Tracker</a></li>
+      <li><a href="chatbot.html">Your Dost (chatbot)</a></li>
+      <li><a href="private-vent.html">Private Vent</a></li>
+      <li><a href="streak.html">Streak</a></li>
+    </ul>
+    <div class="flex align-center gap-md">
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+      <button id="nav-start-talking" class="nav-cta">Start Talking</button>
+    </div>
+  </nav>
+
+  <main class="community-page">
+    <section class="community-shell">
+      <aside class="community-sidebar">
+        <div class="section-label">Anonymous Community</div>
+        <h1 class="community-heading">Ask, answer, and feel less alone.</h1>
+        <p class="community-intro">A quiet feed for honest questions, stories, and supportive replies. No names, no pressure.</p>
+        
+        <!-- Live Search Box -->
+        <div class="search-box-wrap">
+          <input id="community-search" class="community-search-input" type="text" placeholder="🔍 Search posts..." aria-label="Search community posts">
+        </div>
+
+        <div class="topic-list" aria-label="Community topics">
+          <button class="topic-pill active" type="button">All</button>
+          <button class="topic-pill" type="button">Exam Stress</button>
+          <button class="topic-pill" type="button">Loneliness</button>
+          <button class="topic-pill" type="button">Family</button>
+          <button class="topic-pill" type="button">Career</button>
+        </div>
+      </aside>
+
+      <div class="community-feed">
+        <form id="community-compose" class="community-composer">
+          <div class="composer-top">
+            <div class="avatar av1">A</div>
+            <select id="community-topic" class="community-select" aria-label="Choose topic">
+              <option>Exam Stress</option>
+              <option>Loneliness</option>
+              <option>Family</option>
+              <option>Career</option>
+              <option>General</option>
+            </select>
+          </div>
+          <input id="community-title" class="community-title-input" type="text" placeholder="Ask a question or name what happened">
+          <textarea id="community-body" class="community-body-input" rows="4" placeholder="Share anonymously. Keep it respectful and real."></textarea>
+          <div class="composer-actions">
+            <span id="community-compose-status" class="composer-status">Posts stay in this browser for now.</span>
+            <button class="btn btn-primary" type="submit">Post</button>
+          </div>
+        </form>
+
+        <div class="feed-sort">
+          <button class="sort-chip active" type="button">Top</button>
+          <button class="sort-chip" type="button">New</button>
+          <button class="sort-chip" type="button">Unanswered</button>
+        </div>
+
+        <div id="community-posts" class="discussion-list">
+          <!-- Injected dynamically by JavaScript -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Mood Tracker — Zantix</title>
+  <meta name="description" content="Track your daily emotions anonymously. Get personalized wellness exercises and slow breathing guides.">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="mood-page-theme">
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo" style="text-decoration:none;">Zan<span>tix</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-home-link">Home</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="mood-tracker.html" class="active">Mood Tracker</a></li>
+      <li><a href="chatbot.html">Your Dost (chatbot)</a></li>
+      <li><a href="private-vent.html">Private Vent</a></li>
+      <li><a href="streak.html">Streak</a></li>
+    </ul>
+    <div class="flex align-center gap-md">
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">
+        <!-- Sun icon -->
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <!-- Moon icon -->
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+      <a href="chatbot.html" class="nav-cta">Start Talking →</a>
+    </div>
+  </nav>
+
+  <main class="mood-tracker-shell">
+    <div class="mood-tracker-container">
+      
+      <!-- Central Mind Orb Section -->
+      <div class="orb-column reveal">
+        <div class="orb-glow-backdrop" id="orb-backdrop"></div>
+        <div class="mind-orb-wrapper">
+          <div class="mind-orb" id="mind-orb">
+            <span class="orb-emoji" id="orb-emoji">🌿</span>
+            <div class="orb-particle-container" id="orb-particles"></div>
+          </div>
+          <div class="orb-instruction" id="orb-instruction-text">Log your mood to synchronize with the Orb</div>
+        </div>
+
+        <!-- Guided Breathing overlay inside breathing mode -->
+        <div class="orb-breathing-panel" id="orb-breathing-panel" style="display: none;">
+          <p class="breath-tip-text">Match your breath with the expanding aura rings.</p>
+          <button class="btn btn-secondary btn-sm" id="orb-stop-breathe-btn" type="button">Exit Exercise</button>
+        </div>
+      </div>
+
+      <!-- Settings, Selection and History Column -->
+      <div class="settings-column reveal">
+        <div class="section-label">Mind Balance</div>
+        <h1 class="mood-heading">How is your energy today?</h1>
+        <p class="mood-intro">Click a mood below. The Mind Orb and suggestions will shift colors to align with your frequency.</p>
+
+        <!-- Mood Grid -->
+        <div class="mood-selection-grid">
+          <button class="mood-card-btn good-theme" data-mood="Good" type="button">
+            <span class="m-emoji">😊</span>
+            <div class="m-details">
+              <strong>Good</strong>
+              <span>Positive & energized</span>
+            </div>
+          </button>
+
+          <button class="mood-card-btn okay-theme" data-mood="Okay" type="button">
+            <span class="m-emoji">😐</span>
+            <div class="m-details">
+              <strong>Okay</strong>
+              <span>Centered & calm</span>
+            </div>
+          </button>
+
+          <button class="mood-card-btn anxious-theme" data-mood="Anxious" type="button">
+            <span class="m-emoji">😰</span>
+            <div class="m-details">
+              <strong>Anxious</strong>
+              <span>Uneasy or restless</span>
+            </div>
+          </button>
+
+          <button class="mood-card-btn low-theme" data-mood="Low" type="button">
+            <span class="m-emoji">😔</span>
+            <div class="m-details">
+              <strong>Low</strong>
+              <span>Heavy or exhausted</span>
+            </div>
+          </button>
+
+          <button class="mood-card-btn angry-theme" data-mood="Angry" type="button">
+            <span class="m-emoji">😡</span>
+            <div class="m-details">
+              <strong>Angry</strong>
+              <span>Frustrated or tense</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Dynamic suggestions card -->
+        <div class="suggestions-aura-card" id="mood-suggestions-card" style="display: none;">
+          <div class="s-header">
+            <span class="s-badge">💡 Smart Suggestion</span>
+            <h3 id="s-title">Feeling Good?</h3>
+          </div>
+          <p id="s-desc">Wonderful! Here is a self-care exercise recommended for your state.</p>
+          <div class="s-actions" id="s-actions">
+            <!-- Dynamic Actions -->
+          </div>
+        </div>
+
+        <!-- Weekly History Section -->
+        <div class="mood-history-panel">
+          <h3 class="panel-subheading">Your Last 7 Days History</h3>
+          <div class="history-grid-row" id="history-grid">
+            <!-- Dynamic history bubbles -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <div class="footer-bottom" style="margin-top: 60px;">
+    <span>© 2026 Zantix. Made with 💚 in India.</span>
+    <span>Anonymous · Secure · Non-judgmental</span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Meta Tags -->
+  <title>Zantix — You're Not Alone</title>
+  <meta name="description" content="Zantix is a safe, anonymous mental wellness companion. Vent freely, track your moods, connect with community, and access crisis help — completely anonymously.">
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo" style="text-decoration: none;">Zan<span>tix</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-home-link active">Home</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="mood-tracker.html">Mood Tracker</a></li>
+      <li><a href="chatbot.html">Your Dost (chatbot)</a></li>
+      <li><a href="private-vent.html">Private Vent</a></li>
+      <li><a href="streak.html">Streak</a></li>
+    </ul>
+    <div class="flex align-center gap-md">
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">
+        <!-- Sun icon -->
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <!-- Moon icon -->
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+      <button id="nav-start-talking" class="nav-cta">Start Talking →</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Safe · Anonymous · Judgment-Free</div>
+      <h1>A space where you can<br><em>breathe easy</em><br>and just be heard.</h1>
+      <p class="hero-sub">Zantix is your anonymous mental wellness companion. Vent freely, connect with community, track your moods — without fear, without judgment, without your name.</p>
+      <div class="hero-actions">
+        <button id="hero-start-talking" class="btn btn-primary">Start Talking 💬</button>
+        <button id="hero-explore-community" class="btn btn-secondary">Explore Community</button>
+      </div>
+      <p class="hero-note">🔒 100% anonymous · <strong>Not a substitute for therapy</strong> · Available 24/7</p>
+    </div>
+
+    <div class="hero-visual">
+      <div class="floating-pill pill-1">🌿 AI is listening…</div>
+      <div class="mood-card">
+        <div class="mood-card-header">
+          <div class="mood-card-title">How are you feeling today?</div>
+          <span class="ai-badge">AI Support</span>
+        </div>
+        <div class="mood-row">
+          <button class="mood-btn active">😔 Low</button>
+          <button class="mood-btn">😐 Okay</button>
+          <button class="mood-btn">😊 Good</button>
+          <button class="mood-btn">😰 Anxious</button>
+        </div>
+        <div class="chat-preview">
+          <div class="chat-bubble ai">I hear you. It sounds like today has been really heavy. Want to tell me more about what's on your mind?</div>
+          <div class="chat-bubble user">I'm just so overwhelmed with exams and I don't know who to talk to…</div>
+          <div class="chat-bubble ai">That pressure is real, and it makes sense you'd feel overwhelmed. You reached out — that took courage. 💚</div>
+        </div>
+        <div class="chat-input-row">
+          <span>Share what's on your mind…</span>
+          <button class="send-btn">Send</button>
+        </div>
+      </div>
+      <div class="floating-pill pill-2">📊 Mood tracked · Feeling better 📈</div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="features-inner">
+      <div class="features-top">
+        <div>
+          <div class="section-label">Core Features</div>
+          <div class="section-title">Everything you need.<br>Nothing you don't.</div>
+        </div>
+        <p class="section-sub">Six powerful features designed around your emotional safety, privacy, and wellbeing — built for students, young adults, and anyone who just needs to breathe.</p>
+      </div>
+      <div class="features-grid">
+
+        <div class="feature-card accent reveal">
+          <div class="feat-icon green">💬</div>
+          <h3>Anonymous Vent & Chat</h3>
+          <p>Share your thoughts freely — no name, no profile, no trace. Just raw, honest expression in a safe digital space.</p>
+          <div class="feat-tags">
+            <span class="feat-tag">Private</span>
+            <span class="feat-tag">Public option</span>
+            <span class="feat-tag">No identity</span>
+          </div>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feat-icon orange">🤖</div>
+          <h3>AI Emotional Support</h3>
+          <p>A compassionate AI that listens, responds, and gently guides — without judgment. With built-in crisis detection and safety guardrails.</p>
+          <div class="feat-tags">
+            <span class="feat-tag">Safe Mode</span>
+            <span class="feat-tag">No advice</span>
+            <span class="feat-tag">Crisis aware</span>
+          </div>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feat-icon blue">🧑‍🤝‍🧑</div>
+          <h3>Community Feed</h3>
+          <p>Post thoughts anonymously, read others' stories, react with ❤️ 🤝 👍. Realise you are never truly alone.</p>
+          <div class="feat-tags">
+            <span class="feat-tag">Anonymous</span>
+            <span class="feat-tag">Reactions</span>
+            <span class="feat-tag">Replies</span>
+          </div>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feat-icon pink">📊</div>
+          <h3>Mood Tracker</h3>
+          <p>Log your daily mood with a single tap. Zantix gently suggests content, exercises, or community posts based on how you feel.</p>
+          <div class="feat-tags">
+            <span class="feat-tag">Daily check-in</span>
+            <span class="feat-tag">Smart suggest</span>
+            <span class="feat-tag">Trend view</span>
+          </div>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feat-icon yellow">🚨</div>
+          <h3>Emergency Help Button</h3>
+          <p>Always visible. One tap to reach AASRA, Vandrevala Foundation, and verified crisis lines. Because some moments can't wait.</p>
+          <div class="feat-tags">
+            <span class="feat-tag">AASRA</span>
+            <span class="feat-tag">24/7</span>
+            <span class="feat-tag">Instant access</span>
+          </div>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feat-icon purple">🔐</div>
+          <h3>Safety & Moderation</h3>
+          <p>Report harmful content, block users, and trust our AI moderation layer. Your safety is the foundation everything else is built on.</p>
+          <div class="feat-tags">
+            <span class="feat-tag">Report</span>
+            <span class="feat-tag">Block</span>
+            <span class="feat-tag">AI moderation</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="how-inner">
+      <div class="how-top">
+        <div class="section-label">How It Works</div>
+        <div class="section-title">Simple. Private. Supportive.</div>
+        <p class="section-sub">Four steps — no sign-ups required to start.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step reveal">
+          <div class="step-num s1">01</div>
+          <h4>Enter Anonymously</h4>
+          <p>No email, no account needed. Just arrive and begin. Your anonymity is guaranteed by default.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num s2">02</div>
+          <h4>Check Your Mood</h4>
+          <p>A quick daily check-in helps Zantix understand where you are, so it can offer what you actually need.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num s3">03</div>
+          <h4>Talk or Explore</h4>
+          <p>Chat with the AI listener, vent to the community, or browse posts from others who feel just like you.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num s4">04</div>
+          <h4>Feel a Little Lighter</h4>
+          <p>No pressure, no solutions required. Just being heard matters. Come back whenever you need.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY -->
+  <section class="community-section" id="community">
+    <div class="community-inner">
+      <div>
+        <div class="section-label">Community Feed</div>
+        <div class="section-title">Real voices.<br>Real stories.<br>Real comfort.</div>
+        <p class="section-sub">You're not the only one struggling. The community feed shows you that — and lets you show others the same.</p>
+        <div class="flex flex-wrap gap-sm mt-xl">
+          <a class="btn btn-primary" href="community.html">Read Stories</a>
+          <a class="btn btn-secondary" href="community.html#community-compose">Post Anonymously</a>
+        </div>
+      </div>
+      <div class="posts-preview">
+        <div class="post-card reveal">
+          <div class="post-top">
+            <div class="avatar av1">A</div>
+            <span class="anon-label">Anonymous · Exam Stress</span>
+          </div>
+          <p class="post-text">Failed my mock test again. Everyone seems to be doing fine except me. I just needed to say it somewhere.</p>
+          <div class="post-reactions">
+            <button class="react-btn">❤️ 47</button>
+            <button class="react-btn">🤝 23</button>
+            <button class="react-btn">💬 Reply</button>
+          </div>
+        </div>
+        <div class="post-card reveal">
+          <div class="post-top">
+            <div class="avatar av2">B</div>
+            <span class="anon-label">Anonymous · Loneliness</span>
+          </div>
+          <p class="post-text">Moved to a new city for college. It's been three months and I still eat lunch alone. I didn't expect it to hurt this much.</p>
+          <div class="post-reactions">
+            <button class="react-btn">❤️ 89</button>
+            <button class="react-btn">🤝 61</button>
+            <button class="react-btn">💬 Reply</button>
+          </div>
+        </div>
+        <div class="post-card reveal">
+          <div class="post-top">
+            <div class="avatar av3">C</div>
+            <span class="anon-label">Anonymous · Career Anxiety</span>
+          </div>
+          <p class="post-text">Everyone in my family expects me to be an engineer. I like design. I don't know how to tell them without breaking their hearts.</p>
+          <div class="post-reactions">
+            <button class="react-btn">❤️ 134</button>
+            <button class="react-btn">🤝 78</button>
+            <button class="react-btn">💬 Reply</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EMERGENCY -->
+  <section class="emergency" id="emergency">
+    <div class="emergency-inner">
+      <div class="sos-badge">🚨 Crisis Support — Always Available</div>
+      <h2>You don't have to face a crisis alone.</h2>
+      <p>If you're in distress, please reach out immediately. Our emergency button connects you with trained, real humans — right now. Zantix is a support space, not a crisis line, but we'll always help you find one.</p>
+      <div class="flex flex-col align-center gap-xs">
+        <button id="sos-trigger" class="sos-btn">🆘 Get Emergency Help Now</button>
+        <p class="text-sm text-soft">This connects you to verified Indian crisis helplines</p>
+      </div>
+      <div class="helpline-list">
+        <div class="helpline">📞 <strong>AASRA</strong> · 9820466627</div>
+        <div class="helpline">📞 <strong>Vandrevala Foundation</strong> · 1860-2662-345</div>
+        <div class="helpline">📞 <strong>iCall</strong> · 9152987821</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">
+      <div class="logo">Zan<span>tix</span></div>
+      <p>A safe, anonymous space for emotional wellbeing. Built for young India — students, dreamers, and anyone who just needs to breathe.</p>
+      <div class="disclaimer-bar">⚠️ <strong>Important:</strong> Zantix is not a substitute for professional mental health treatment. If you are in crisis, please contact a qualified mental health professional or use our emergency help feature.
+      </div>
+    </div>
+    <div>
+      <h5>Features</h5>
+      <ul>
+        <li><a href="#">Anonymous Chat</a></li>
+        <li><a href="#">AI Listener</a></li>
+        <li><a href="#">Mood Tracker</a></li>
+        <li><a href="#">Community Feed</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Support</h5>
+      <ul>
+        <li><a href="#">Crisis Resources</a></li>
+        <li><a href="#">Safety Center</a></li>
+        <li><a href="#">Report Issue</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Use</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <span>© 2026 Zantix. Made with 💚 in India.</span>
+    <span>Anonymous · Secure · Non-judgmental</span>
+  </div>
+
+  <!-- JavaScript Behavior Controller -->
+  <script src="script.js"></script>
+</body>
+</html>

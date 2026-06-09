@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Your Dost — AI Companion | Zantix</title>
+  <meta name="description" content="Your Dost is Zantix's AI-powered mental wellness chatbot. Talk anonymously, get compassionate support, and feel heard — 24/7.">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="chatbot.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo" style="text-decoration:none;">Zan<span>tix</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-home-link">Home</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="mood-tracker.html">Mood Tracker</a></li>
+      <li><a href="chatbot.html" class="nav-active">Your Dost (chatbot)</a></li>
+      <li><a href="private-vent.html">Private Vent</a></li>
+      <li><a href="streak.html">Streak</a></li>
+    </ul>
+    <div class="flex align-center gap-md">
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">
+        <!-- Sun icon -->
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <!-- Moon icon -->
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+      <a href="index.html" class="nav-cta">← Back to Home</a>
+    </div>
+  </nav>
+
+  <!-- CHATBOT MAIN -->
+  <main class="chatbot-page">
+    <!-- Sidebar -->
+    <aside class="chatbot-sidebar" id="chatbot-sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <div class="dost-avatar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path>
+              <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+              <line x1="9" y1="9" x2="9.01" y2="9"></line>
+              <line x1="15" y1="9" x2="15.01" y2="9"></line>
+            </svg>
+          </div>
+          <div>
+            <h2>Your Dost</h2>
+            <span class="status-online">● Online 24/7</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-mood-check">
+        <p class="mood-prompt">How are you feeling right now?</p>
+        <div class="mood-quick-row">
+          <button class="mood-quick-btn" data-mood="😔 Low">😔</button>
+          <button class="mood-quick-btn" data-mood="😐 Okay">😐</button>
+          <button class="mood-quick-btn" data-mood="😊 Good">😊</button>
+          <button class="mood-quick-btn" data-mood="😰 Anxious">😰</button>
+          <button class="mood-quick-btn" data-mood="😡 Frustrated">😡</button>
+          <button class="mood-quick-btn" data-mood="😢 Sad">😢</button>
+        </div>
+      </div>
+
+      <div class="sidebar-topics">
+        <p class="topics-label">Quick topics</p>
+        <div class="topic-chips">
+          <button class="topic-chip" data-topic="I'm feeling stressed about exams">📚 Exam Stress</button>
+          <button class="topic-chip" data-topic="I feel lonely and disconnected">💔 Loneliness</button>
+          <button class="topic-chip" data-topic="I'm anxious about my future career">💼 Career Anxiety</button>
+          <button class="topic-chip" data-topic="I'm having trouble sleeping">🌙 Sleep Issues</button>
+          <button class="topic-chip" data-topic="I had a fight with someone close">😤 Relationship Issues</button>
+          <button class="topic-chip" data-topic="I just need someone to listen">🤝 Just Vent</button>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <button id="clear-chat" class="sidebar-action-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          New Conversation
+        </button>
+
+        <div class="crisis-banner">
+          <div class="crisis-icon">🚨</div>
+          <div>
+            <strong>In crisis?</strong>
+            <p>AASRA: <a href="tel:9820466627">9820466627</a></p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Chat Area -->
+    <section class="chatbot-main" id="chatbot-main">
+      <!-- Chat Header (mobile) -->
+      <div class="chat-header-bar">
+        <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle sidebar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <div class="chat-header-info">
+          <div class="dost-avatar-sm">🤖</div>
+          <div>
+            <strong>Your Dost</strong>
+            <span class="status-online-sm">● Online</span>
+          </div>
+        </div>
+        <div class="chat-header-actions">
+          <button id="clear-chat-mobile" class="header-action-btn" aria-label="New conversation">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages Container -->
+      <div class="messages-container" id="messages-container">
+        <!-- Welcome screen (shown initially) -->
+        <div class="welcome-screen" id="welcome-screen">
+          <div class="welcome-glow"></div>
+          <div class="welcome-avatar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path>
+              <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+              <line x1="9" y1="9" x2="9.01" y2="9"></line>
+              <line x1="15" y1="9" x2="15.01" y2="9"></line>
+            </svg>
+          </div>
+          <h2 class="welcome-title">Hey there 💚</h2>
+          <p class="welcome-sub">I'm <strong>Your Dost</strong> — your anonymous AI companion.<br>This is a safe space. No judgment, no identity, no pressure.<br>Whatever you're feeling, I'm here to listen.</p>
+          <div class="welcome-suggestions">
+            <button class="welcome-chip" data-msg="I'm not doing great today...">😔 I'm not doing great</button>
+            <button class="welcome-chip" data-msg="I just need someone to talk to">💬 Just want to talk</button>
+            <button class="welcome-chip" data-msg="I'm feeling overwhelmed with everything">😰 Feeling overwhelmed</button>
+            <button class="welcome-chip" data-msg="I had a rough day and need to vent">🌧️ Had a rough day</button>
+          </div>
+          <p class="welcome-disclaimer">🔒 Anonymous · Not a substitute for therapy · Available 24/7</p>
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="chat-input-area" id="chat-input-area">
+        <div class="input-wrapper">
+          <textarea id="chat-input" placeholder="Share what's on your mind..." rows="1" maxlength="2000" aria-label="Type your message"></textarea>
+          <div class="input-actions">
+            <span class="char-count" id="char-count">0/2000</span>
+            <button id="send-btn" class="chat-send-btn" disabled aria-label="Send message">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <p class="input-footer-note">Your Dost is an AI companion, not a therapist. <a href="index.html#emergency">Need crisis help?</a></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Chatbot JavaScript -->
+  <script src="chatbot.js"></script>
+</body>
+</html>

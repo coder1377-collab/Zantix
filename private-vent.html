@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Zantix - Private Vent</title>
+  <meta name="description" content="A private Zantix space to write or record a voice vent locally on your device.">
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
+    <a class="logo" href="index.html" style="text-decoration: none;">Zan<span>tix</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-home-link">Home</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="mood-tracker.html">Mood Tracker</a></li>
+      <li><a href="chatbot.html">Your Dost (chatbot)</a></li>
+      <li><a href="private-vent.html" class="active">Private Vent</a></li>
+      <li><a href="streak.html">Streak</a></li>
+    </ul>
+    <div class="flex align-center gap-md">
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+      <button id="nav-start-talking" class="nav-cta">Start Talking</button>
+    </div>
+  </nav>
+
+  <main>
+    <section class="vent-section vent-page" id="vent">
+      <div class="vent-inner">
+        <div class="vent-copy reveal">
+          <div class="section-label">Private Vent</div>
+          <div class="section-title">Let it out.<br>No audience required.</div>
+          <p class="section-sub">Use this quiet space to write exactly what you are feeling or record your voice directly. Your draft and latest recording stay on this device until you choose to clear them.</p>
+          <div class="vent-prompts">
+            <button class="prompt-chip" type="button">I feel overwhelmed because...</button>
+            <button class="prompt-chip" type="button">What I wish someone understood is...</button>
+            <button class="prompt-chip" type="button">Right now I need...</button>
+          </div>
+
+          <!-- Calming Breathing Card -->
+          <div class="vent-grounding-card" id="vent-grounding-card">
+            <h4>Feeling Distressed?</h4>
+            <p>Take a 1-minute pause to practice slow, grounding breathing before or after you vent.</p>
+            <button class="btn btn-secondary btn-sm" id="vent-breathe-btn" type="button">Start Grounding Breath</button>
+            
+            <div class="breathing-bubble-container" id="vent-breathing-container" style="display: none;">
+              <div class="breathing-circle-wrapper">
+                <div class="breathing-circle" id="vent-breathing-circle"></div>
+                <div class="breathing-text" id="vent-breathing-text">Inhale</div>
+              </div>
+              <button class="btn btn-secondary btn-sm" id="vent-stop-breathing-btn" type="button">Stop</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="vent-panel reveal">
+          <div class="vent-panel-top">
+            <div>
+              <h3>Private note and recording</h3>
+              <p>Saved only in your browser</p>
+            </div>
+            <div class="flex align-center gap-sm">
+              <button id="zen-mode-toggle" class="zen-toggle-btn" type="button" aria-label="Toggle distraction-free zen mode">👁️ Zen Mode</button>
+              <span class="privacy-badge">Locked</span>
+            </div>
+          </div>
+
+          <label class="vent-label" for="private-vent-input">What is on your mind?</label>
+          <div class="voice-vent-bar">
+            <button id="voice-vent-toggle" class="voice-vent-btn" type="button" aria-pressed="false">
+              <span class="voice-dot" aria-hidden="true"></span>
+              <span id="voice-vent-label">Start Recording</span>
+            </button>
+            <span id="voice-vent-status" class="voice-vent-status">Record a private voice vent.</span>
+          </div>
+          <div id="voice-playback-wrap" class="voice-playback-wrap" hidden>
+            <audio id="voice-vent-audio" class="voice-vent-audio" controls></audio>
+            <button id="voice-delete" class="voice-delete-btn" type="button">Delete Recording</button>
+          </div>
+          <textarea id="private-vent-input" class="vent-input" rows="10" placeholder="Type freely here. No one else can see this note."></textarea>
+
+          <div class="vent-tools">
+            <div class="vent-mood-group" aria-label="Vent mood">
+              <button class="vent-mood active" type="button">Heavy</button>
+              <button class="vent-mood" type="button">Angry</button>
+              <button class="vent-mood" type="button">Numb</button>
+              <button class="vent-mood" type="button">Hopeful</button>
+            </div>
+            <span id="vent-word-count" class="vent-count">0 words</span>
+          </div>
+
+          <!-- Word Goal progress tracker -->
+          <div class="word-goal-wrapper">
+            <div class="word-goal-header">
+              <span class="goal-label">Word Goal (100 words)</span>
+              <span id="goal-progress-percent" class="goal-percent">0%</span>
+            </div>
+            <div class="goal-progress-bar-bg">
+              <div id="goal-progress-bar-fill" class="goal-progress-bar-fill" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="vent-actions">
+            <button id="vent-save" class="btn btn-primary" type="button">Save Draft</button>
+            <button id="vent-clear" class="btn btn-secondary" type="button">Clear</button>
+          </div>
+          <p id="vent-status" class="vent-status" aria-live="polite">Ready when you are.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
