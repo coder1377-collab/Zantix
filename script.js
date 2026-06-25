@@ -59,6 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const communityBody = document.getElementById('community-body');
   const communityTopic = document.getElementById('community-topic');
   const communityComposeStatus = document.getElementById('community-compose-status');
+  const communityDownloadBtn = document.getElementById('community-download');
+  const communityDownloadStatus = document.getElementById('community-download-status');
   const communityStorageKey = 'zantixCommunityPosts';
 
   const defaultCommunityPosts = [
@@ -100,6 +102,13 @@ document.addEventListener('DOMContentLoaded', () => {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 
+  const replayAnimation = (element, className) => {
+    if (!element) return;
+    element.classList.remove(className);
+    void element.offsetWidth;
+    element.classList.add(className);
+  };
+
   // Initialize seed posts if empty
   if (!localStorage.getItem(communityStorageKey)) {
     localStorage.setItem(communityStorageKey, JSON.stringify(defaultCommunityPosts));
@@ -130,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <button class="vote-btn downvote" type="button" aria-label="Downvote">▼</button>
       </div>
       <div class="discussion-content">
-        <div class="discussion-meta">Anonymous · ${escapeHtml(post.topic)} · ${escapeHtml(post.time)}</div>
+        <div class="discussion-meta">Anonymous · <span class="topic-tag tag-${escapeHtml(post.topic).toLowerCase().replace(/\s+/g, '-')}">${escapeHtml(post.topic)}</span> · ${escapeHtml(post.time)}</div>
         <h2>${escapeHtml(post.title)}</h2>
         <p>${escapeHtml(post.body)}</p>
         <div class="discussion-actions">
@@ -164,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem(communityStorageKey, JSON.stringify(savedPosts));
         voteCountSpan.textContent = targetPost.votes;
         card.dataset.votes = targetPost.votes;
+        replayAnimation(voteCountSpan, 'vote-pop');
       }
     };
 
@@ -290,8 +300,10 @@ document.addEventListener('DOMContentLoaded', () => {
       emptyMsg.innerHTML = `<p>No anonymous stories found matching your selection.</p>`;
       communityPosts.appendChild(emptyMsg);
     } else {
-      filtered.forEach(post => {
-        communityPosts.appendChild(createDiscussionCard(post));
+      filtered.forEach((post, index) => {
+        const card = createDiscussionCard(post);
+        card.style.setProperty('--card-index', index);
+        communityPosts.appendChild(card);
       });
     }
   };
@@ -300,7 +312,57 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPosts();
   }
 
+  if (communityDownloadBtn) {
+    communityDownloadBtn.addEventListener('click', () => {
+      const posts = JSON.parse(localStorage.getItem(communityStorageKey) || '[]');
+
+      if (!posts.length) {
+        if (communityDownloadStatus) communityDownloadStatus.textContent = 'No posts to download yet.';
+        return;
+      }
+
+      const exportedAt = new Date();
+      const payload = {
+        app: 'Zantix Community',
+        exportedAt: exportedAt.toISOString(),
+        totalPosts: posts.length,
+        posts
+      };
+      const fileText = JSON.stringify(payload, null, 2);
+      const blob = new Blob([fileText], { type: 'application/json' });
+      const downloadUrl = URL.createObjectURL(blob);
+      const downloadLink = document.createElement('a');
+      const dateSlug = exportedAt.toISOString().slice(0, 10);
+
+      downloadLink.href = downloadUrl;
+      downloadLink.download = `zantix-community-${dateSlug}.json`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      downloadLink.remove();
+      URL.revokeObjectURL(downloadUrl);
+
+      replayAnimation(communityDownloadBtn, 'downloaded');
+      if (communityDownloadStatus) {
+        communityDownloadStatus.textContent = `Downloaded ${posts.length} ${posts.length === 1 ? 'post' : 'posts'}.`;
+      }
+    });
+  }
+
   if (communityCompose && communityPosts) {
+    const updateComposerTheme = () => {
+      if (!communityTopic) return;
+      const topic = communityTopic.value;
+      const themeClass = 'theme-' + topic.toLowerCase().replace(/\s+/g, '-');
+      // Remove other theme classes
+      communityCompose.className = 'community-composer';
+      communityCompose.classList.add(themeClass);
+    };
+
+    if (communityTopic) {
+      communityTopic.addEventListener('change', updateComposerTheme);
+      updateComposerTheme();
+    }
+
     communityCompose.addEventListener('submit', (event) => {
       event.preventDefault();
       const title = communityTitle.value.trim();
@@ -326,6 +388,8 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem(communityStorageKey, JSON.stringify(savedPosts));
       
       communityCompose.reset();
+      updateComposerTheme();
+      replayAnimation(communityCompose, 'just-posted');
       if (communityComposeStatus) communityComposeStatus.textContent = 'Posted anonymously in this browser.';
       renderPosts();
     });
@@ -613,12 +677,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ─── DAILY DASHBOARD: MOOD & STREAK ───
-  const moodSelectBtns = document.querySelectorAll('.mood-select-btn');
+  const moodSelectBtns = document.querySelectorAll('.mood-card-btn');
   const moodCheckinStatus = document.getElementById('mood-checkin-status');
-  const moodSuggestionPanel = document.getElementById('mood-suggestion-panel');
-  const suggestionTitle = document.getElementById('suggestion-title');
-  const suggestionText = document.getElementById('suggestion-text');
-  const suggestionActions = document.getElementById('suggestion-actions');
+  const moodSuggestionPanel = document.getElementById('mood-suggestions-card');
+  const suggestionTitle = document.getElementById('s-title');
+  const suggestionText = document.getElementById('s-desc');
+  const suggestionActions = document.getElementById('s-actions');
   
   const breathingBubbleContainer = document.getElementById('breathing-bubble-container');
   const breathingCircle = document.getElementById('breathing-circle');
@@ -676,17 +740,17 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     Okay: {
       title: "A calm, steady space 🌊",
-      text: "Feeling okay is a solid foundation. Take a moment to check in with a brief grounding breathing exercise or chat with Dost if you want a casual conversation.",
+      text: "Feeling okay is a solid foundation. Explore our Relax page to do some brief grounding exercises or chat with Dost if you want a casual conversation.",
       actions: [
-        { label: "Breathe Now", action: "breathe" },
+        { label: "Go to Relax Center", url: "relax.html" },
         { label: "Chat with Dost", url: "chatbot.html" }
       ]
     },
     Anxious: {
       title: "Slow down and center 🍃",
-      text: "Anxiety can feel like a racing storm. Let's practice a guided slow breath cycle together to bring you back to the present moment.",
+      text: "Anxiety can feel like a racing storm. Visit our Relax center to practice guided slow breath cycles and 5-4-3-2-1 grounding to bring you back to the present moment.",
       actions: [
-        { label: "Guided Breathing", action: "breathe" },
+        { label: "Relax & Ground", url: "relax.html" },
         { label: "Talk to Dost", url: "chatbot.html" }
       ]
     },
@@ -700,10 +764,10 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     Angry: {
       title: "Releasing the pressure 🌋",
-      text: "Anger holds a lot of energy. A great way to release it is by writing a raw, unfiltered note in your private vent, then hitting 'Clear' to instantly shred it.",
+      text: "Anger holds a lot of energy. A great way to release it is by writing a raw, unfiltered note in your private vent, or using our progressive muscle relaxation exercises.",
       actions: [
         { label: "Write & Shred", url: "private-vent.html" },
-        { label: "Calming Breath", action: "breathe" }
+        { label: "Calming Exercises", url: "relax.html" }
       ]
     }
   };

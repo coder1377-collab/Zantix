@@ -21,6 +21,8 @@
       <li><a href="chatbot.html">Your Dost (chatbot)</a></li>
       <li><a href="private-vent.html">Private Vent</a></li>
       <li><a href="streak.html">Streak</a></li>
+      <li><a href="relax.html">Relax</a></li>
+
     </ul>
     <div class="flex align-center gap-md">
       <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">
@@ -44,6 +46,14 @@
   </nav>
 
   <main class="community-page">
+    <!-- Decorative floating background gradient blobs -->
+    <div class="community-glow-blobs" aria-hidden="true">
+      <div class="glow-blob blob-orange"></div>
+      <div class="glow-blob blob-indigo"></div>
+      <div class="glow-blob blob-rose"></div>
+      <div class="glow-blob blob-teal"></div>
+    </div>
+
     <section class="community-shell">
       <aside class="community-sidebar">
         <div class="section-label">Anonymous Community</div>
@@ -56,11 +66,33 @@
         </div>
 
         <div class="topic-list" aria-label="Community topics">
-          <button class="topic-pill active" type="button">All</button>
-          <button class="topic-pill" type="button">Exam Stress</button>
-          <button class="topic-pill" type="button">Loneliness</button>
-          <button class="topic-pill" type="button">Family</button>
-          <button class="topic-pill" type="button">Career</button>
+          <button class="topic-pill pill-all active" type="button">All</button>
+          <button class="topic-pill pill-exam-stress" type="button">Exam Stress</button>
+          <button class="topic-pill pill-loneliness" type="button">Loneliness</button>
+          <button class="topic-pill pill-family" type="button">Family</button>
+          <button class="topic-pill pill-career" type="button">Career</button>
+          <button class="topic-pill pill-general" type="button">General</button>
+        </div>
+
+        <div class="community-download-panel" aria-label="Download community archive">
+          <div class="download-dost-header">
+            <div class="download-dost-avatar" aria-hidden="true">🤖</div>
+            <div>
+              <strong>Save with Dost</strong>
+              <span>Anonymous archive</span>
+            </div>
+          </div>
+          <div class="download-emoji-row" aria-hidden="true">
+            <span>💚</span>
+            <span>🔒</span>
+            <span>💬</span>
+            <span>✨</span>
+          </div>
+          <button id="community-download" class="download-feed-btn" type="button" aria-label="Download all community posts">
+            <span aria-hidden="true">📥</span>
+            Download Feed
+          </button>
+          <span id="community-download-status" class="download-status" aria-live="polite"></span>
         </div>
       </aside>
 

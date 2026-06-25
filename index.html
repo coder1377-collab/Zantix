@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- CSS Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 
@@ -26,6 +26,7 @@
       <li><a href="chatbot.html">Your Dost (chatbot)</a></li>
       <li><a href="private-vent.html">Private Vent</a></li>
       <li><a href="streak.html">Streak</a></li>
+      <li><a href="relax.html">Relax</a></li>
     </ul>
     <div class="flex align-center gap-md">
       <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">
@@ -207,51 +208,79 @@
 
   <!-- COMMUNITY -->
   <section class="community-section" id="community">
+    <!-- Floating emotion emojis -->
+    <div class="community-floaters">
+      <span class="c-float c-f1">💚</span>
+      <span class="c-float c-f2">🤝</span>
+      <span class="c-float c-f3">✨</span>
+      <span class="c-float c-f4">🌿</span>
+      <span class="c-float c-f5">💬</span>
+    </div>
     <div class="community-inner">
       <div>
         <div class="section-label">Community Feed</div>
-        <div class="section-title">Real voices.<br>Real stories.<br>Real comfort.</div>
-        <p class="section-sub">You're not the only one struggling. The community feed shows you that — and lets you show others the same.</p>
+        <div class="section-title">Voices that heal.<br>Stories that <span class="gradient-word">connect.</span></div>
+        <p class="section-sub">Thousands of anonymous voices sharing what they can't say out loud. Read, relate, reply — and know you're never truly alone.</p>
+        
+        <!-- Community Stats -->
+        <div class="community-stats">
+          <div class="c-stat">
+            <span class="c-stat-num">2.4k+</span>
+            <span class="c-stat-label">Stories Shared</span>
+          </div>
+          <div class="c-stat">
+            <span class="c-stat-num">8.7k+</span>
+            <span class="c-stat-label">Hearts Given</span>
+          </div>
+          <div class="c-stat">
+            <span class="c-stat-num">1.2k+</span>
+            <span class="c-stat-label">Supportive Replies</span>
+          </div>
+        </div>
+
         <div class="flex flex-wrap gap-sm mt-xl">
-          <a class="btn btn-primary" href="community.html">Read Stories</a>
+          <a class="btn btn-primary community-cta-glow" href="community.html">Read Stories</a>
           <a class="btn btn-secondary" href="community.html#community-compose">Post Anonymously</a>
         </div>
       </div>
       <div class="posts-preview">
-        <div class="post-card reveal">
+        <div class="post-card post-topic-stress reveal">
           <div class="post-top">
             <div class="avatar av1">A</div>
-            <span class="anon-label">Anonymous · Exam Stress</span>
+            <span class="anon-label">Anonymous</span>
+            <span class="topic-badge badge-stress">📚 Exam Stress</span>
           </div>
           <p class="post-text">Failed my mock test again. Everyone seems to be doing fine except me. I just needed to say it somewhere.</p>
           <div class="post-reactions">
             <button class="react-btn">❤️ 47</button>
             <button class="react-btn">🤝 23</button>
-            <button class="react-btn">💬 Reply</button>
+            <button class="react-btn">💬 12</button>
           </div>
         </div>
-        <div class="post-card reveal">
+        <div class="post-card post-topic-lonely reveal">
           <div class="post-top">
             <div class="avatar av2">B</div>
-            <span class="anon-label">Anonymous · Loneliness</span>
+            <span class="anon-label">Anonymous</span>
+            <span class="topic-badge badge-lonely">🌙 Loneliness</span>
           </div>
           <p class="post-text">Moved to a new city for college. It's been three months and I still eat lunch alone. I didn't expect it to hurt this much.</p>
           <div class="post-reactions">
             <button class="react-btn">❤️ 89</button>
             <button class="react-btn">🤝 61</button>
-            <button class="react-btn">💬 Reply</button>
+            <button class="react-btn">💬 34</button>
           </div>
         </div>
-        <div class="post-card reveal">
+        <div class="post-card post-topic-career reveal">
           <div class="post-top">
             <div class="avatar av3">C</div>
-            <span class="anon-label">Anonymous · Career Anxiety</span>
+            <span class="anon-label">Anonymous</span>
+            <span class="topic-badge badge-career">🎯 Career</span>
           </div>
           <p class="post-text">Everyone in my family expects me to be an engineer. I like design. I don't know how to tell them without breaking their hearts.</p>
           <div class="post-reactions">
             <button class="react-btn">❤️ 134</button>
             <button class="react-btn">🤝 78</button>
-            <button class="react-btn">💬 Reply</button>
+            <button class="react-btn">💬 45</button>
           </div>
         </div>
       </div>
