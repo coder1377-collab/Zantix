@@ -82,6 +82,36 @@ def serve_chatbot():
     return send_from_directory('.', 'chatbot.html')
 
 
+@app.route('/community')
+def serve_community():
+    """Serve the community page."""
+    return send_from_directory('.', 'community.html')
+
+
+@app.route('/mood-tracker')
+def serve_mood_tracker():
+    """Serve the mood tracker page."""
+    return send_from_directory('.', 'mood-tracker.html')
+
+
+@app.route('/private-vent')
+def serve_private_vent():
+    """Serve the private vent page."""
+    return send_from_directory('.', 'private-vent.html')
+
+
+@app.route('/streak')
+def serve_streak():
+    """Serve the streak page."""
+    return send_from_directory('.', 'streak.html')
+
+
+@app.route('/relax')
+def serve_relax():
+    """Serve the relax page."""
+    return send_from_directory('.', 'relax.html')
+
+
 @app.route('/api/chat', methods=['POST'])
 def chat():
     """

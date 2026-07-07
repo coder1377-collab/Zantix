@@ -50,108 +50,172 @@
     </div>
   </nav>
 
-  <main class="streak-tracker-shell">
-    <div class="streak-tracker-container">
+  <main class="streak-tracker-shell advanced-streak-mode">
+    
+    <!-- Controls Row -->
+    <div class="dashboard-controls-row">
+      <button id="sound-effects-toggle" class="control-btn-glow active" aria-label="Toggle retro synth reward sounds">
+        <span>🔊 Synth FX: ON</span>
+      </button>
+    </div>
 
-      <!-- Central SVG Flame Column -->
-      <div class="flame-column reveal">
-        <div class="flame-glow-backdrop" id="flame-backdrop"></div>
-        
-        <div class="flame-card">
-          <div class="flame-graphic-wrapper">
-            <!-- Animated SVG Flame -->
-            <svg class="streak-flame-svg" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+    <div class="streak-grid-layout">
+
+      <!-- Left Column: Core Reactor and XP -->
+      <div class="quantum-card-wrapper reveal">
+        <div class="quantum-core-card" id="quantum-core-card">
+          <div class="reactor-viewport">
+            <div class="reactor-glow-field" id="reactor-glow-field"></div>
+            <div class="reactor-rings-wrap"></div>
+            
+            <!-- Dynamic Core SVG -->
+            <svg class="reactor-core-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <!-- Flame gradients -->
-                <linearGradient id="flame-low-grad" x1="0%" y1="100%" x2="0%" y2="0%">
-                  <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.9"/>
-                  <stop offset="50%" stop-color="#F59E0B" stop-opacity="0.8"/>
-                  <stop offset="100%" stop-color="#EF4444" stop-opacity="0.2"/>
-                </linearGradient>
-                <linearGradient id="flame-medium-grad" x1="0%" y1="100%" x2="0%" y2="0%">
-                  <stop offset="0%" stop-color="#EF4444" stop-opacity="0.95"/>
-                  <stop offset="40%" stop-color="#F97316" stop-opacity="0.95"/>
-                  <stop offset="85%" stop-color="#FBBF24" stop-opacity="0.8"/>
-                  <stop offset="100%" stop-color="#FFFF55" stop-opacity="0.2"/>
-                </linearGradient>
-                <linearGradient id="flame-high-grad" x1="0%" y1="100%" x2="0%" y2="0%">
-                  <stop offset="0%" stop-color="#9333EA" stop-opacity="0.95"/>
-                  <stop offset="50%" stop-color="#06B6D4" stop-opacity="0.9"/>
-                  <stop offset="90%" stop-color="#3B82F6" stop-opacity="0.7"/>
-                  <stop offset="100%" stop-color="#E0F2FE" stop-opacity="0.2"/>
-                </linearGradient>
+                <radialGradient id="reactor-core-grad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="var(--core-accent, #ea580c)" stop-opacity="1" />
+                  <stop offset="70%" stop-color="#9333ea" stop-opacity="0.8" />
+                  <stop offset="100%" stop-color="#000000" stop-opacity="0.1" />
+                </radialGradient>
               </defs>
-              <path class="flame-glow-path" d="M50 15 C85 55, 85 95, 50 115 C15 95, 15 55, 50 15 Z" fill="none"/>
-              <path class="flame-main-path" id="streak-flame-path" d="M50 20 C75 58, 80 92, 50 110 C20 92, 25 58, 50 20 Z" fill="url(#flame-low-grad)"/>
+              <!-- Glowing animated rings -->
+              <circle cx="50" cy="50" r="42" fill="none" stroke="var(--core-accent, #ea580c)" stroke-width="1.5" stroke-dasharray="8 6" class="core-ring-animated" style="animation-duration: 10s;" />
+              <circle cx="50" cy="50" r="34" fill="none" stroke="var(--core-accent, #ea580c)" stroke-width="1" stroke-dasharray="4 8" class="core-ring-animated" style="animation-duration: 6s; animation-direction: reverse;" />
+              <circle cx="50" cy="50" r="26" fill="url(#reactor-core-grad)" />
             </svg>
 
-            <!-- Text overlay on flame -->
-            <div class="flame-overlay-text">
-              <span class="count" id="streak-days-count">0</span>
-              <span class="label">Days Active</span>
+            <!-- Text Overlay inside reactor -->
+            <div class="reactor-core-text">
+              <span class="count" id="reactor-streak-count">0</span>
+              <span class="label">Day Streak</span>
             </div>
           </div>
 
           <div class="streak-level-card">
-            <span class="level-badge" id="streak-badge-title">🌱 Beginner</span>
-            <p class="streak-quote-msg" id="streak-quote-msg">"Log your mood today to start your streak!"</p>
+            <span class="level-badge" id="reactor-rank-title">🌱 Beginner</span>
+            <p class="streak-quote-msg" id="reactor-quote-msg">"Every step counts. Log your mood to begin."</p>
           </div>
+
+          <!-- XP Leveling System -->
+          <div class="xp-level-container">
+            <div class="level-meta">
+              <span id="level-display-label">Level 1 Novice</span>
+              <span id="xp-progress-ratio">0 / 50 XP</span>
+            </div>
+            <div class="xp-progress-bar" title="XP progress towards next level">
+              <div class="xp-progress-fill" id="xp-progress-fill"></div>
+            </div>
+          </div>
+
+          <!-- Virtual Currencies Grid -->
+          <div class="currencies-grid">
+            <div class="currency-badge-card" title="ZanCoins: Earned from checking in and completing quests">
+              <span class="icon">🪙</span>
+              <div class="info">
+                <span class="val" id="currency-zancoins-val">0</span>
+                <span class="lbl">ZanCoins</span>
+              </div>
+            </div>
+            <div class="currency-badge-card" id="freeze-inventory-card" title="Streak Freezes: Protect your streak if you miss a day">
+              <span class="icon">❄️</span>
+              <div class="info">
+                <span class="val" id="currency-freezes-val">0</span>
+                <span class="lbl">Freezes</span>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <!-- Checklist & Milestones Column -->
+      <!-- Right Column: Interactive Heatmap, Quests, Shop, Analytics, Badges -->
       <div class="milestones-column reveal">
-        <div class="section-label">Habit Builder</div>
-        <h1 class="streak-heading">Mindfulness Highway</h1>
-        <p class="streak-intro">Build self-care consistency. Log your mood every day to progress down the highway and unlock premium badges.</p>
+        
+        <!-- Welcome Info -->
+        <div class="section-label">Quantum Wellness Protocol</div>
+        <h1 class="streak-heading">Mindfulness Gateway</h1>
+        <p class="streak-intro">Maintain wellness streaks to supercharge your Quantum Reactor. Complete quests, earn ZanCoins, and unlock visual customizer core skins!</p>
 
-        <!-- Weekly checklist checkboxes -->
-        <div class="streak-checklist-card">
-          <h3>This Week's Check-ins</h3>
-          <div class="checklist-grid" id="checklist-grid">
-            <!-- Dynamic checklists Mon-Sun -->
+        <!-- Dynamic Analytics Row -->
+        <div class="analytics-metric-cards-row">
+          <div class="analytic-card">
+            <div class="analytic-icon-wrapper">📈</div>
+            <div class="analytic-info">
+              <span class="analytic-num" id="stat-consistency-val">0%</span>
+              <span class="analytic-label">Consistency</span>
+            </div>
+          </div>
+          <div class="analytic-card">
+            <div class="analytic-icon-wrapper">🔥</div>
+            <div class="analytic-info">
+              <span class="analytic-num" id="stat-max-streak-val">0</span>
+              <span class="analytic-label">Max Streak</span>
+            </div>
+          </div>
+          <div class="analytic-card">
+            <div class="analytic-icon-wrapper">📅</div>
+            <div class="analytic-info">
+              <span class="analytic-num" id="stat-total-logs-val">0</span>
+              <span class="analytic-label">Total Logs</span>
+            </div>
           </div>
         </div>
 
-        <!-- Milestone progress badges -->
+        <!-- 1. Interactive Heatmap (Activity contribution grid) -->
+        <div class="heatmap-card">
+          <h3>Self-Care Contribution Heatmap</h3>
+          <p class="streak-intro" style="font-size: var(--fs-xs); margin-bottom: 12px;">Your last 12 weeks of check-ins. Hover over squares to see recorded moods.</p>
+          
+          <div class="heatmap-scroll-wrapper">
+            <div class="heatmap-grid-weeks" id="heatmap-grid-weeks">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+          <div class="heatmap-labels-row" id="heatmap-months-row">
+            <!-- Dynamically populated via JS -->
+          </div>
+
+          <div class="heatmap-legend">
+            <span>Less</span>
+            <div class="legend-square" style="background: var(--cream);" title="No check-in"></div>
+            <div class="legend-square logged-good" title="Good mood"></div>
+            <div class="legend-square logged-okay" title="Okay mood"></div>
+            <div class="legend-square logged-anxious" title="Anxious mood"></div>
+            <div class="legend-square logged-low" title="Low mood"></div>
+            <div class="legend-square logged-angry" title="Angry mood"></div>
+            <span>More</span>
+          </div>
+          
+          <!-- Heatmap Tooltip -->
+          <div class="heatmap-tooltip" id="heatmap-tooltip"></div>
+        </div>
+
+        <!-- 2. Quest Center Card -->
+        <div class="quests-container-card">
+          <h3>Active Protokol Quests</h3>
+          <p class="streak-intro" style="font-size: var(--fs-xs); margin-bottom: 12px;">Perform daily routines across Zantix to claim XP and coin bounties.</p>
+          
+          <div class="quests-list" id="quests-list">
+            <!-- Dynamically loaded quest cards -->
+          </div>
+        </div>
+
+        <!-- 3. Streak Shop / Customizer Shop Card -->
+        <div class="shop-container-card">
+          <h3>Cosmic Upgrades & Shop</h3>
+          <p class="streak-intro" style="font-size: var(--fs-xs); margin-bottom: 12px;">Spend ZanCoins here to shield your streak or customize your core aesthetic skin.</p>
+          
+          <div class="shop-items-grid" id="shop-items-grid">
+            <!-- Dynamically loaded shop items -->
+          </div>
+        </div>
+
+        <!-- 4. Holographic Badges / Achievements -->
         <div class="milestones-dashboard">
-          <h3>Streak Achievements</h3>
-          <div class="milestones-highway">
-            <div class="milestone-card active" data-streak-req="0">
-              <div class="m-icon-wrap">🌱</div>
-              <div class="m-content">
-                <h4>Beginner</h4>
-                <p>Checked in at least once</p>
-                <span class="m-status-badge unlocked">Unlocked</span>
-              </div>
-            </div>
-
-            <div class="milestone-card" id="m-card-mindful" data-streak-req="3">
-              <div class="m-icon-wrap">🌿</div>
-              <div class="m-content">
-                <h4>Mindful</h4>
-                <p>Maintain a 3-day streak</p>
-                <span class="m-status-badge locked" id="m-badge-mindful">Locked</span>
-              </div>
-            </div>
-
-            <div class="milestone-card" id="m-card-hero" data-streak-req="7">
-              <div class="m-icon-wrap">🌸</div>
-              <div class="m-content">
-                <h4>Self-Care Hero</h4>
-                <p>Maintain a 7-day streak</p>
-                <span class="m-status-badge locked" id="m-badge-hero">Locked</span>
-              </div>
-            </div>
-
-            <div class="milestone-card" id="m-card-zen" data-streak-req="14">
-              <div class="m-icon-wrap">🧘</div>
-              <div class="m-content">
-                <h4>Zen Master</h4>
-                <p>Maintain a 14-day streak</p>
-                <span class="m-status-badge locked" id="m-badge-zen">Locked</span>
-              </div>
-            </div>
+          <h3>Holographic Wellness Badges</h3>
+          <p class="streak-intro" style="font-size: var(--fs-xs); margin-bottom: 12px;">Earned automatically when hitting key milestone marks.</p>
+          
+          <div class="hologram-badges-grid" id="badges-grid">
+            <!-- Dynamically loaded achievements -->
           </div>
         </div>
 

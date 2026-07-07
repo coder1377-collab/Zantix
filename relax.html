@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Relax & Ground — Zantix</title>
   <meta name="description" content="Ease off with guided breathing techniques and grounding exercises.">
-  
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  
+
   <style>
     /* Specific Relax Page Styles */
     .relax-container {
@@ -16,55 +18,117 @@
       margin: 120px auto 60px;
       padding: 0 var(--space-xl);
     }
+
     .relax-header {
       text-align: center;
       margin-bottom: var(--space-3xl);
     }
+
+    /* Category Filters */
+    .relax-filters {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: var(--space-2xl);
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--mid);
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .filter-btn:hover {
+      background: var(--cream);
+      color: var(--heading-color);
+      transform: translateY(-1px);
+    }
+
+    .filter-btn.active {
+      background: var(--sage);
+      color: var(--button-fg);
+      border-color: var(--sage);
+    }
+
     .relax-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: var(--space-2xl);
     }
-    
+
     .exercise-card {
       background: var(--card-bg);
       border-radius: var(--radius-2xl);
       padding: var(--space-xl);
       box-shadow: var(--shadow-md);
-      transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+      transition: transform var(--transition-normal), box-shadow var(--transition-normal), opacity 0.3s ease;
       cursor: pointer;
       position: relative;
       overflow: hidden;
       animation: fadeUp 0.6s ease both;
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
     }
+
+    .exercise-card.hidden {
+      display: none;
+    }
+
     .exercise-card:hover {
       transform: translateY(-4px);
       box-shadow: var(--shadow-lg);
     }
-    
+
+    /* Theme Colors */
+    .theme-focus { --theme-accent: #10B981; --theme-bg: rgba(16, 185, 129, 0.05); --theme-text: #047857; }
+    .theme-sleep { --theme-accent: #8B5CF6; --theme-bg: rgba(139, 92, 246, 0.05); --theme-text: #5B21B6; }
+    .theme-relax { --theme-accent: #3B82F6; --theme-bg: rgba(59, 130, 246, 0.05); --theme-text: #1D4ED8; }
+    .theme-anxiety { --theme-accent: #F59E0B; --theme-bg: rgba(245, 158, 11, 0.05); --theme-text: #B45309; }
+    .theme-tension { --theme-accent: #EF4444; --theme-bg: rgba(239, 68, 68, 0.05); --theme-text: #B91C1C; }
+
+    .exercise-card[data-theme="focus"]:hover { border-color: var(--theme-accent); background: var(--theme-bg); }
+    .exercise-card[data-theme="sleep"]:hover { border-color: var(--theme-accent); background: var(--theme-bg); }
+    .exercise-card[data-theme="relax"]:hover { border-color: var(--theme-accent); background: var(--theme-bg); }
+    .exercise-card[data-theme="anxiety"]:hover { border-color: var(--theme-accent); background: var(--theme-bg); }
+    .exercise-card[data-theme="tension"]:hover { border-color: var(--theme-accent); background: var(--theme-bg); }
+
     .ex-title {
       font-size: var(--fs-xl);
       font-weight: 700;
       color: var(--heading-color);
       margin-bottom: var(--space-xs);
     }
+
     .ex-desc {
       color: var(--mid);
       font-size: var(--fs-base);
       line-height: 1.6;
       margin-bottom: var(--space-md);
+      flex: 1;
     }
+
     .ex-badge {
       display: inline-block;
       padding: 4px 12px;
       border-radius: var(--radius-pill);
       font-size: var(--fs-xs);
       font-weight: 600;
-      background: var(--sage-light);
-      color: var(--sage-dark);
       margin-bottom: var(--space-sm);
+      align-self: flex-start;
+      background: var(--theme-bg);
+      color: var(--theme-text);
+      border: 1px solid var(--theme-accent);
     }
-    
+
     /* Breathing Visualizer Modal */
     .breathe-modal {
       display: none;
@@ -77,10 +141,12 @@
       justify-content: center;
       flex-direction: column;
     }
+
     .breathe-modal.active {
       display: flex;
       animation: fadeIn 0.4s ease both;
     }
+
     .breathe-circle-container {
       position: relative;
       width: 300px;
@@ -90,23 +156,45 @@
       justify-content: center;
       margin-bottom: var(--space-2xl);
     }
+
     .breathe-circle {
       width: 100px;
       height: 100px;
-      background: linear-gradient(135deg, var(--sage), var(--sage-light));
+      background: var(--theme-accent, var(--sage));
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.1s linear;
-      box-shadow: 0 0 30px rgba(77, 182, 172, 0.4);
+      transition: transform 1s ease-in-out, background 1s ease-in-out;
+      box-shadow: 0 0 30px rgba(0,0,0,0.1);
     }
+
+    .breathe-circle.active-glow {
+      animation: pulseGlow 2s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      from { box-shadow: 0 0 20px var(--theme-accent, var(--sage)); }
+      to { box-shadow: 0 0 50px var(--theme-accent, var(--sage)); }
+    }
+
     .breathe-text {
-      color: var(--button-fg);
-      font-weight: 700;
-      font-size: var(--fs-xl);
+      color: white;
+      font-weight: 500;
+      font-size: var(--fs-xs);
       z-index: 2;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      text-align: center;
+      line-height: 1.2;
     }
+    
+    .breathe-timer {
+      display: block;
+      font-size: var(--fs-base);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
     .close-modal-btn {
       position: absolute;
       top: 40px;
@@ -122,12 +210,32 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: all 0.2s;
     }
+
     .close-modal-btn:hover {
       background: var(--mid);
       color: var(--card-bg);
+      transform: scale(1.1);
     }
-    
+
+    .stop-btn {
+      background: transparent;
+      border: 2px solid var(--border-color);
+      color: var(--heading-color);
+      padding: 10px 24px;
+      border-radius: var(--radius-pill);
+      font-size: var(--fs-md);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .stop-btn:hover {
+      background: var(--border-color);
+      transform: translateY(-2px);
+    }
+
     /* Grounding Modal Styles */
     .grounding-content {
       background: var(--card-bg);
@@ -140,6 +248,7 @@
       text-align: left;
       position: relative;
     }
+
     .g-step {
       margin-bottom: var(--space-md);
       padding: var(--space-md);
@@ -151,16 +260,19 @@
       transition: background 0.3s ease;
       cursor: pointer;
     }
+
     .g-step:hover {
       background: var(--sage-light);
     }
+
     .g-step.completed {
       opacity: 0.5;
       text-decoration: line-through;
     }
+
     .g-step-num {
       background: var(--sage);
-      color: var(--button-fg);
+      color: white;
       width: 30px;
       height: 30px;
       border-radius: 50%;
@@ -170,8 +282,17 @@
       font-weight: 700;
       flex-shrink: 0;
     }
+    
+    .pmr-timer {
+      font-size: var(--fs-sm);
+      color: var(--mid);
+      margin-top: 4px;
+      display: block;
+      font-weight: 500;
+    }
   </style>
 </head>
+
 <body>
 
   <!-- NAV -->
@@ -183,11 +304,12 @@
       <li><a href="mood-tracker.html">Mood Tracker</a></li>
       <li><a href="chatbot.html">Your Dost</a></li>
       <li><a href="private-vent.html">Private Vent</a></li>
-      <li><a href="relax.html" class="active">Relax</a></li>
+      <li><a href="relax.html">Relax</a></li>
     </ul>
     <div class="flex align-center gap-md">
       <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">
-        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"></circle>
           <line x1="12" y1="1" x2="12" y2="3"></line>
           <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -196,7 +318,8 @@
           <line x1="1" y1="12" x2="3" y2="12"></line>
           <line x1="21" y1="12" x2="23" y2="12"></line>
         </svg>
-        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
         </svg>
       </button>
@@ -208,48 +331,78 @@
     <div class="relax-header">
       <div class="section-label">Find your center</div>
       <h1 class="section-title">Relax & <em>Ground</em></h1>
-      <p class="section-sub" style="margin: 0 auto;">Select an exercise to help manage stress, reduce anxiety, and reconnect with your body in the present moment.</p>
+      <p class="section-sub" style="margin: 0 auto;">Select an exercise to help manage stress, reduce anxiety, and
+        reconnect with your body in the present moment.</p>
     </div>
 
-    <!-- Breathing Techniques -->
-    <h2 class="mb-lg mt-xl" style="color: var(--heading-color);">Breathing Techniques</h2>
-    <div class="relax-grid mb-2xl">
-      <div class="exercise-card" onclick="startBreathing('box')" style="animation-delay: 0.1s;">
+    <!-- Category Filters -->
+    <div class="relax-filters" id="relax-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="stress">Stress</button>
+      <button class="filter-btn" data-filter="sleep">Sleep</button>
+      <button class="filter-btn" data-filter="focus">Focus</button>
+      <button class="filter-btn" data-filter="anxiety">Anxiety</button>
+    </div>
+
+    <div class="relax-grid mb-2xl" id="relax-grid">
+      <!-- Breathing: Box Breathing -->
+      <div class="exercise-card theme-focus" data-theme="focus" data-category="focus stress" onclick="startBreathing('box')">
         <span class="ex-badge">Focus & Calm</span>
         <h3 class="ex-title">Box Breathing (4-4-4-4)</h3>
-        <p class="ex-desc">A powerful stress reliever. Inhale for 4s, hold for 4s, exhale for 4s, hold for 4s. Used by Navy SEALs to stay calm.</p>
+        <p class="ex-desc">A powerful stress reliever. Inhale for 4s, hold for 4s, exhale for 4s, hold for 4s. Used by
+          Navy SEALs to stay calm.</p>
         <div class="btn btn-primary" style="width: 100%;">Start Breathing</div>
       </div>
 
-      <div class="exercise-card" onclick="startBreathing('478')" style="animation-delay: 0.2s;">
+      <!-- Breathing: 4-7-8 -->
+      <div class="exercise-card theme-sleep" data-theme="sleep" data-category="sleep anxiety stress" onclick="startBreathing('478')">
         <span class="ex-badge">Sleep & Anxiety</span>
         <h3 class="ex-title">4-7-8 Relaxing Breath</h3>
-        <p class="ex-desc">Acts as a natural tranquilizer for the nervous system. Inhale for 4s, hold for 7s, exhale deeply for 8s.</p>
+        <p class="ex-desc">Acts as a natural tranquilizer for the nervous system. Inhale for 4s, hold for 7s, exhale
+          deeply for 8s.</p>
         <div class="btn btn-primary" style="width: 100%;">Start Breathing</div>
       </div>
 
-      <div class="exercise-card" onclick="startBreathing('belly')" style="animation-delay: 0.3s;">
+      <!-- Breathing: Belly -->
+      <div class="exercise-card theme-relax" data-theme="relax" data-category="stress anxiety" onclick="startBreathing('belly')">
         <span class="ex-badge">Deep Relaxation</span>
         <h3 class="ex-title">Deep Belly Breathing</h3>
-        <p class="ex-desc">Simple diaphragmatic breathing to lower heart rate. Slow deep inhale for 4s, slow relaxing exhale for 6s.</p>
+        <p class="ex-desc">Simple diaphragmatic breathing to lower heart rate. Slow deep inhale for 4s, slow relaxing
+          exhale for 6s.</p>
         <div class="btn btn-primary" style="width: 100%;">Start Breathing</div>
       </div>
-    </div>
 
-    <!-- Grounding Exercises -->
-    <h2 class="mb-lg" style="color: var(--heading-color);">Grounding Exercises</h2>
-    <div class="relax-grid">
-      <div class="exercise-card" onclick="openGroundingModal('54321')" style="animation-delay: 0.4s;">
+      <!-- Breathing: Alternate Nostril -->
+      <div class="exercise-card theme-focus" data-theme="focus" data-category="focus stress" onclick="startBreathing('nostril')">
+        <span class="ex-badge">Focus & Balance</span>
+        <h3 class="ex-title">Alternate Nostril Breathing</h3>
+        <p class="ex-desc">Balance the mind and improve focus. Close right nostril, inhale left. Close left, exhale right.</p>
+        <div class="btn btn-primary" style="width: 100%;">Start Breathing</div>
+      </div>
+
+      <!-- Grounding: 5-4-3-2-1 -->
+      <div class="exercise-card theme-anxiety" data-theme="anxiety" data-category="anxiety stress" onclick="openGroundingModal('54321')">
         <span class="ex-badge">Anxiety Relief</span>
         <h3 class="ex-title">5-4-3-2-1 Grounding</h3>
-        <p class="ex-desc">A sensory exercise to pull your mind away from anxious thoughts and ground you in the physical world.</p>
+        <p class="ex-desc">A sensory exercise to pull your mind away from anxious thoughts and ground you in the
+          physical world.</p>
         <div class="btn btn-secondary" style="width: 100%;">Begin Exercise</div>
       </div>
 
-      <div class="exercise-card" onclick="openGroundingModal('pmr')" style="animation-delay: 0.5s;">
-        <span class="ex-badge">Physical Tension</span>
+      <!-- Grounding: PMR -->
+      <div class="exercise-card theme-tension" data-theme="tension" data-category="stress sleep" onclick="openGroundingModal('pmr')">
+        <span class="ex-badge">Body Tension</span>
         <h3 class="ex-title">Progressive Muscle Relaxation</h3>
-        <p class="ex-desc">Systematically tense and release muscle groups to achieve deep physical and mental relaxation.</p>
+        <p class="ex-desc">Systematically tense and release muscle groups to achieve deep physical and mental
+          relaxation.</p>
+        <div class="btn btn-secondary" style="width: 100%;">Begin Exercise</div>
+      </div>
+
+      <!-- Grounding: Body Scan -->
+      <div class="exercise-card theme-sleep" data-theme="sleep" data-category="sleep" onclick="openGroundingModal('bodyscan')">
+        <span class="ex-badge">Sleep & Rest</span>
+        <h3 class="ex-title">Body Scan Meditation</h3>
+        <p class="ex-desc">A guided journey through your body to notice tension and consciously relax each part for better sleep.</p>
         <div class="btn btn-secondary" style="width: 100%;">Begin Exercise</div>
       </div>
     </div>
@@ -260,21 +413,24 @@
     <button class="close-modal-btn" onclick="stopBreathingModal()">✕</button>
     <h2 id="breathe-title" style="color: var(--heading-color); margin-bottom: 10px;">Box Breathing</h2>
     <p id="breathe-subtitle" style="color: var(--mid); margin-bottom: 40px;">Follow the circle.</p>
-    
+
     <div class="breathe-circle-container">
-      <div class="breathe-circle" id="breathe-circle">
-        <span class="breathe-text" id="breathe-text">Ready</span>
+      <div class="breathe-circle active-glow" id="breathe-circle">
+        <span class="breathe-text" id="breathe-text">Ready<br><span class="breathe-timer" id="breathe-timer"></span></span>
       </div>
     </div>
+    
+    <button class="stop-btn" onclick="stopBreathingModal()">Stop Session</button>
   </div>
 
   <!-- Grounding Modal -->
   <div class="breathe-modal" id="grounding-modal">
     <div class="grounding-content">
-      <button class="close-modal-btn" style="position: absolute; top: 20px; right: 20px;" onclick="closeGroundingModal()">✕</button>
+      <button class="close-modal-btn" style="position: absolute; top: 20px; right: 20px;"
+        onclick="closeGroundingModal()">✕</button>
       <h2 id="g-title" class="mb-sm" style="color: var(--heading-color);">Title</h2>
       <p id="g-desc" class="mb-xl text-mid">Description</p>
-      
+
       <div id="g-steps-container">
         <!-- Steps injected by JS -->
       </div>
@@ -289,4 +445,5 @@
   <script src="relax.js"></script>
   <script src="script.js"></script>
 </body>
+
 </html>
