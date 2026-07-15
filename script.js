@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // ─── USER ID GENERATION ───
+  let zantixUserId = localStorage.getItem('zantix_user_id');
+  if (!zantixUserId) {
+    zantixUserId = 'user-' + Date.now() + '-' + Math.floor(Math.random() * 1000000);
+    localStorage.setItem('zantix_user_id', zantixUserId);
+  }
+
   // ─── THEME TOGGLE ───
   const themeToggle = document.getElementById('theme-toggle');
   
@@ -132,20 +139,41 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     });
 
+    const topicClass = escapeHtml(post.topic).toLowerCase().replace(/[^a-z0-9]/g, '-');
+    const topicEmojis = {
+      'exam stress': '⚡',
+      'loneliness': '🌌',
+      'family': '❤️',
+      'career': '🧭',
+      'general': '🌱'
+    };
+    const topicEmoji = topicEmojis[post.topic.toLowerCase()] || '✨';
+    const hugCount = post.hugs || (Math.floor(post.votes * 0.4) + 12);
+
     card.innerHTML = `
       <div class="vote-rail" data-vote="0">
-        <button class="vote-btn upvote" type="button" aria-label="Upvote">▲</button>
+        <button class="vote-btn upvote" type="button" aria-label="Upvote" title="Upvote">▲</button>
         <span class="vote-count">${post.votes}</span>
-        <button class="vote-btn downvote" type="button" aria-label="Downvote">▼</button>
+        <button class="vote-btn downvote" type="button" aria-label="Downvote" title="Downvote">▼</button>
       </div>
       <div class="discussion-content">
-        <div class="discussion-meta">Anonymous · <span class="topic-tag tag-${escapeHtml(post.topic).toLowerCase().replace(/\s+/g, '-')}">${escapeHtml(post.topic)}</span> · ${escapeHtml(post.time)}</div>
-        <h2>${escapeHtml(post.title)}</h2>
-        <p>${escapeHtml(post.body)}</p>
+        <div class="discussion-meta reddit-post-meta">
+          <span class="reddit-sub-tag">r/ZantixSanctuary</span>
+          <span class="disc-author-chip">• Posted by <strong style="color:var(--heading-color);">Anonymous Student</strong></span>
+          <span class="disc-time">${escapeHtml(post.time)}</span>
+          <span class="topic-tag tag-${topicClass}" style="margin-left:auto;">${topicEmoji} ${escapeHtml(post.topic)}</span>
+        </div>
+        <h2 class="disc-title">${escapeHtml(post.title)}</h2>
+        <p class="disc-body">${escapeHtml(post.body)}</p>
         <div class="discussion-actions">
-          <button class="discussion-action reply-trigger" type="button">Reply · <span class="reply-c-num">${post.replies.length}</span></button>
-          <button class="discussion-action support-btn" type="button">Support</button>
-          <button class="discussion-action save-btn" type="button">Save</button>
+          <button class="discussion-action reply-trigger" type="button">
+            <span>💬 Comments</span> <span class="reply-c-num">${post.replies.length}</span>
+          </button>
+          <button class="discussion-action support-btn" type="button">
+            <span>💚 Virtual Hug</span> <span class="hug-c-num">${hugCount}</span>
+          </button>
+          <button class="discussion-action save-btn" type="button">🔖 Save</button>
+          <button class="discussion-action share-btn" type="button" onclick="alert('Anonymous share link copied to clipboard! ✨')">↗ Share</button>
         </div>
         
         <div class="replies-panel" style="display: none;">
@@ -154,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <form class="reply-composer">
             <input class="reply-input" placeholder="Write a supportive reply anonymously..." required></input>
-            <button class="reply-submit-btn" type="submit">Reply</button>
+            <button class="reply-submit-btn" type="submit">Send Reply ✨</button>
           </form>
         </div>
       </div>
@@ -165,16 +193,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const upvoteBtn = card.querySelector('.upvote');
     const downvoteBtn = card.querySelector('.downvote');
     
-    const updatePostVotes = (newVoteValue) => {
-      const savedPosts = JSON.parse(localStorage.getItem(communityStorageKey) || '[]');
-      const targetPost = savedPosts.find(p => p.id === post.id);
-      if (targetPost) {
-        targetPost.votes = post.votes + newVoteValue;
-        localStorage.setItem(communityStorageKey, JSON.stringify(savedPosts));
-        voteCountSpan.textContent = targetPost.votes;
-        card.dataset.votes = targetPost.votes;
-        replayAnimation(voteCountSpan, 'vote-pop');
-      }
+    const updatePostVotes = async (newVoteValue) => {
+      try {
+        if (newVoteValue === 1) await fetch(`/api/community/posts/${post._id || post.id}/upvote`, { method: 'POST' });
+      } catch (e) { console.error(e); }
+      const currentVotes = (post.upvotes !== undefined ? post.upvotes : post.votes) || 0;
+      const newTotal = currentVotes + newVoteValue;
+      voteCountSpan.textContent = newTotal;
+      card.dataset.votes = newTotal;
+      replayAnimation(voteCountSpan, 'vote-pop');
     };
 
     upvoteBtn.addEventListener('click', () => {
@@ -206,8 +233,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const supportBtn = card.querySelector('.support-btn');
+    const hugNumSpan = supportBtn ? supportBtn.querySelector('.hug-c-num') : null;
     supportBtn.addEventListener('click', () => {
-      supportBtn.classList.toggle('active');
+      const isNowActive = supportBtn.classList.toggle('active');
+      if (hugNumSpan) {
+        let currentHugs = parseInt(hugNumSpan.textContent || '0');
+        hugNumSpan.textContent = isNowActive ? currentHugs + 1 : Math.max(0, currentHugs - 1);
+      }
+      if (isNowActive) {
+        const floatHug = document.createElement('span');
+        floatHug.className = 'floating-hug-particle';
+        floatHug.textContent = '+1 Hug 💚';
+        supportBtn.appendChild(floatHug);
+        setTimeout(() => floatHug.remove(), 1200);
+      }
     });
 
     const saveBtn = card.querySelector('.save-btn');
@@ -228,46 +267,57 @@ document.addEventListener('DOMContentLoaded', () => {
     const repliesList = card.querySelector('.replies-list');
     const replyCountNum = card.querySelector('.reply-c-num');
 
-    replyComposer.addEventListener('submit', (e) => {
+    replyComposer.addEventListener('submit', async (e) => {
       e.preventDefault();
       const replyText = replyInput.value.trim();
       if (!replyText) return;
 
-      const newReply = { body: replyText, time: 'Just now' };
+      const newReply = { body: replyText, time: 'Just now', authorAvatar: 'A' };
 
-      const savedPosts = JSON.parse(localStorage.getItem(communityStorageKey) || '[]');
-      const targetPost = savedPosts.find(p => p.id === post.id);
-      if (targetPost) {
-        targetPost.replies.push(newReply);
-        localStorage.setItem(communityStorageKey, JSON.stringify(savedPosts));
-        
-        const replyItemDiv = document.createElement('div');
-        replyItemDiv.className = 'reply-item';
-        replyItemDiv.innerHTML = `
-          <div class="reply-meta">Anonymous · Just now</div>
-          <div class="reply-body">${escapeHtml(newReply.body)}</div>
-        `;
-        repliesList.appendChild(replyItemDiv);
-        
-        replyInput.value = '';
-        repliesList.scrollTop = repliesList.scrollHeight;
-        
-        replyCountNum.textContent = targetPost.replies.length;
-        card.dataset.repliesCount = targetPost.replies.length;
-      }
+      try {
+        await fetch(`/api/community/posts/${post._id || post.id}/reply`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newReply)
+        });
+      } catch (err) { console.error(err); }
+      
+      const replyItemDiv = document.createElement('div');
+      replyItemDiv.className = 'reply-item';
+      replyItemDiv.innerHTML = `
+        <div class="reply-meta">Anonymous · Just now</div>
+        <div class="reply-body">${escapeHtml(newReply.body)}</div>
+      `;
+      repliesList.appendChild(replyItemDiv);
+      
+      replyInput.value = '';
+      repliesList.scrollTop = repliesList.scrollHeight;
+      
+      if (!post.replies) post.replies = [];
+      post.replies.push(newReply);
+      replyCountNum.textContent = post.replies.length;
+      card.dataset.repliesCount = post.replies.length;
     });
 
     return card;
   };
 
-  const renderPosts = () => {
+  const renderPosts = async () => {
     if (!communityPosts) return;
     
+    let posts = [];
+    try {
+      const res = await fetch('/api/community/posts');
+      if (res.ok) posts = await res.json();
+      else posts = JSON.parse(localStorage.getItem(communityStorageKey) || '[]');
+    } catch (e) {
+      posts = JSON.parse(localStorage.getItem(communityStorageKey) || '[]');
+    }
+    
     communityPosts.innerHTML = '';
-    const posts = JSON.parse(localStorage.getItem(communityStorageKey) || '[]');
     
     const activeTopicBtn = document.querySelector('.topic-pill.active');
-    const activeTopic = activeTopicBtn ? activeTopicBtn.textContent.trim() : 'All';
+    const activeTopic = activeTopicBtn ? (activeTopicBtn.dataset.topic || activeTopicBtn.textContent.trim()) : 'All';
     let filtered = posts.filter(post => activeTopic === 'All' || post.topic === activeTopic);
     
     const searchInput = document.getElementById('community-search');
@@ -280,15 +330,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     const activeSortBtn = document.querySelector('.sort-chip.active');
-    const activeSort = activeSortBtn ? activeSortBtn.textContent.trim() : 'Top';
+    const activeSort = activeSortBtn ? (activeSortBtn.dataset.sort || activeSortBtn.textContent.trim()) : 'Top';
+    
+    const getVotes = p => (p.upvotes !== undefined ? p.upvotes : p.votes) || 0;
     
     if (activeSort === 'Top') {
-      filtered.sort((a, b) => b.votes - a.votes);
+      filtered.sort((a, b) => getVotes(b) - getVotes(a));
     } else if (activeSort === 'New') {
+      // Assuming API returns newest first or we just reverse
       filtered.reverse();
     } else if (activeSort === 'Unanswered') {
-      filtered = filtered.filter(post => post.replies.length === 0);
-      filtered.sort((a, b) => b.votes - a.votes);
+      filtered = filtered.filter(post => !post.replies || post.replies.length === 0);
+      filtered.sort((a, b) => getVotes(b) - getVotes(a));
     }
     
     if (filtered.length === 0) {
@@ -301,6 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
       communityPosts.appendChild(emptyMsg);
     } else {
       filtered.forEach((post, index) => {
+        if (post.votes === undefined && post.upvotes !== undefined) post.votes = post.upvotes;
         const card = createDiscussionCard(post);
         card.style.setProperty('--card-index', index);
         communityPosts.appendChild(card);
@@ -363,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
       updateComposerTheme();
     }
 
-    communityCompose.addEventListener('submit', (event) => {
+    communityCompose.addEventListener('submit', async (event) => {
       event.preventDefault();
       const title = communityTitle.value.trim();
       const body = communityBody.value.trim();
@@ -374,23 +428,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const post = { 
-        id: 'post-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
-        title, 
-        body, 
-        topic, 
-        votes: 1, 
-        replies: [], 
-        time: 'Just now' 
-      };
-      const savedPosts = JSON.parse(localStorage.getItem(communityStorageKey) || '[]');
-      savedPosts.push(post);
-      localStorage.setItem(communityStorageKey, JSON.stringify(savedPosts));
+      const post = { title, body, topic, authorAvatar: 'A' };
+      
+      try {
+        await fetch('/api/community/posts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(post)
+        });
+      } catch (e) { console.error(e); }
       
       communityCompose.reset();
       updateComposerTheme();
       replayAnimation(communityCompose, 'just-posted');
-      if (communityComposeStatus) communityComposeStatus.textContent = 'Posted anonymously in this browser.';
+      if (communityComposeStatus) communityComposeStatus.textContent = 'Posted anonymously to the community.';
       renderPosts();
     });
   }
@@ -753,8 +804,28 @@ document.addEventListener('DOMContentLoaded', () => {
   let breathingTimeoutId = null;
   let isBreathingActive = false;
 
+  const syncMoodLogs = async () => {
+    try {
+      const res = await fetch('/api/mood', { headers: { 'X-User-Id': zantixUserId } });
+      if (res.ok) {
+        const logs = await res.json();
+        if (logs && logs.length > 0) {
+           localStorage.setItem(MOOD_LOGS_KEY, JSON.stringify(logs));
+        }
+      }
+    } catch(e) {}
+  };
+  syncMoodLogs();
+
   const loadMoodLogs = () => JSON.parse(localStorage.getItem(MOOD_LOGS_KEY) || '[]');
-  const saveMoodLogs = (logs) => localStorage.setItem(MOOD_LOGS_KEY, JSON.stringify(logs));
+  const saveMoodLogs = (logs) => {
+    localStorage.setItem(MOOD_LOGS_KEY, JSON.stringify(logs));
+    fetch('/api/mood', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-User-Id': zantixUserId },
+      body: JSON.stringify(logs)
+    }).catch(e => console.error('Failed to sync mood logs', e));
+  };
   
   // ─── EXTENDED GAMIFIED STREAK STATE ───
   const loadStreak = () => {
@@ -2327,4 +2398,123 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.reveal').forEach(el => {
     revealObserver.observe(el);
   });
+
+  // ─── DAILY / MIDNIGHT ENVELOPE CAPSULE SYSTEM ───
+  const midnightCapsules = [
+    {
+      title: "Hey there, Night Owl 🌙",
+      message: "It’s quiet right now. Whatever is keeping your mind awake tonight—exam pressure, overthinking, or feeling behind—take one deep breath. You don't have to figure out your whole life tonight. Rest is productive too.",
+      dare: "Unclench your jaw, drop your shoulders away from your ears, and take one sip of water."
+    },
+    {
+      title: "A Gentle Reminder ✨",
+      message: "Comparison is the thief of joy. Everyone else’s highlight reel hides their 3 AM doubts too. You are running your own race at your own pace.",
+      dare: "Give yourself permission to close any tabs or notes that are stressing you out right now."
+    },
+    {
+      title: "You Are Enough 🌿",
+      message: "A difficult semester or one rough exam is just a single page in your story—it is never the whole title. Look how many hard days you've already survived.",
+      dare: "Put one hand on your chest, take a 4-second inhale, and remind yourself: 'I am doing the best I can.'"
+    },
+    {
+      title: "Midnight Sanctuary 🌌",
+      message: "When everything feels overwhelming, zoom in to just the next 10 minutes. You don't have to carry tomorrow's burdens tonight.",
+      dare: "Write down or mentally release one worry you cannot control before sleeping."
+    }
+  ];
+
+  function openMidnightCapsuleModal() {
+    let backdrop = document.getElementById('midnight-modal-backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.id = 'midnight-modal-backdrop';
+      backdrop.className = 'midnight-modal-backdrop';
+      document.body.appendChild(backdrop);
+    }
+
+    const todayStr = new Date().toDateString();
+    let capsuleIdx = Math.floor(Math.random() * midnightCapsules.length);
+    const savedIdx = localStorage.getItem('zantix_capsule_idx_' + todayStr);
+    if (savedIdx !== null) {
+      capsuleIdx = parseInt(savedIdx, 10) % midnightCapsules.length;
+    } else {
+      localStorage.setItem('zantix_capsule_idx_' + todayStr, capsuleIdx);
+    }
+
+    const capsule = midnightCapsules[capsuleIdx];
+
+    backdrop.innerHTML = `
+      <div class="midnight-envelope-card">
+        <button class="midnight-close-btn" aria-label="Close modal">×</button>
+        <span class="midnight-envelope-icon">💌</span>
+        <h3 class="midnight-title">${capsule.title}</h3>
+        <div class="midnight-subtitle">Your Daily Wellness Capsule</div>
+        <div class="midnight-message-box">
+          <p class="midnight-message-text">"${capsule.message}"</p>
+          <div class="midnight-dare-box">
+            <strong>✨ Gentle Micro-Dare:</strong> ${capsule.dare}
+          </div>
+        </div>
+        <div class="midnight-actions">
+          <button class="btn btn-primary midnight-done-btn">Thank you, got it 💚</button>
+        </div>
+      </div>
+    `;
+
+    const closeBtn = backdrop.querySelector('.midnight-close-btn');
+    const doneBtn = backdrop.querySelector('.midnight-done-btn');
+
+    const closeModal = () => {
+      backdrop.classList.remove('active');
+    };
+
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (doneBtn) doneBtn.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) closeModal();
+    });
+
+    setTimeout(() => {
+      backdrop.classList.add('active');
+    }, 50);
+
+    // Remove notification dot once opened today
+    const sparkle = document.querySelector('.envelope-sparkle');
+    if (sparkle) sparkle.style.display = 'none';
+    localStorage.setItem('zantix_opened_capsule_' + todayStr, 'true');
+  }
+
+  // Automatically inject envelope button next to theme toggle if present
+  const themeToggleBtn = document.getElementById('theme-toggle');
+  if (themeToggleBtn && themeToggleBtn.parentNode && !document.getElementById('daily-envelope-btn')) {
+    const envelopeBtn = document.createElement('button');
+    envelopeBtn.id = 'daily-envelope-btn';
+    envelopeBtn.className = 'envelope-btn';
+    envelopeBtn.setAttribute('aria-label', 'Open Daily Midnight Capsule');
+    envelopeBtn.setAttribute('title', 'Your Daily Wellness Capsule');
+
+    const todayStr = new Date().toDateString();
+    const alreadyOpened = localStorage.getItem('zantix_opened_capsule_' + todayStr) === 'true';
+
+    envelopeBtn.innerHTML = `
+      💌
+      <span class="envelope-sparkle" style="display: ${alreadyOpened ? 'none' : 'block'};"></span>
+    `;
+
+    envelopeBtn.addEventListener('click', openMidnightCapsuleModal);
+    themeToggleBtn.parentNode.insertBefore(envelopeBtn, themeToggleBtn);
+  }
+
+  // Auto-open at night (12 AM to 4 AM) once per night
+  const currentHour = new Date().getHours();
+  const todayDateStr = new Date().toDateString();
+  const seenMidnightToday = localStorage.getItem('zantix_seen_midnight_' + todayDateStr);
+
+  if ((currentHour >= 0 && currentHour < 4) && !seenMidnightToday) {
+    localStorage.setItem('zantix_seen_midnight_' + todayDateStr, 'true');
+    setTimeout(() => {
+      openMidnightCapsuleModal();
+    }, 1200);
+  }
 });
+

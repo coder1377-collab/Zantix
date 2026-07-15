@@ -335,13 +335,10 @@
         reconnect with your body in the present moment.</p>
     </div>
 
-    <!-- Category Filters -->
+    <!-- Main Section Tabs: Activities vs Flashcards -->
     <div class="relax-filters" id="relax-filters">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="stress">Stress</button>
-      <button class="filter-btn" data-filter="sleep">Sleep</button>
-      <button class="filter-btn" data-filter="focus">Focus</button>
-      <button class="filter-btn" data-filter="anxiety">Anxiety</button>
+      <button class="filter-btn active" data-section="activities">🌿 Activities</button>
+      <button class="filter-btn" data-section="flashcards">🎴 Flashcards</button>
     </div>
 
     <div class="relax-grid mb-2xl" id="relax-grid">
@@ -373,19 +370,19 @@
       </div>
 
       <!-- Breathing: Alternate Nostril -->
-      <div class="exercise-card theme-focus" data-theme="focus" data-category="focus stress" onclick="startBreathing('nostril')">
-        <span class="ex-badge">Focus & Balance</span>
-        <h3 class="ex-title">Alternate Nostril Breathing</h3>
-        <p class="ex-desc">Balance the mind and improve focus. Close right nostril, inhale left. Close left, exhale right.</p>
+      <div class="exercise-card theme-focus" data-theme="focus" data-category="focus anxiety" onclick="startBreathing('nostril')">
+        <span class="ex-badge">Balance & Clarity</span>
+        <h3 class="ex-title">Alternate Nostril Breath</h3>
+        <p class="ex-desc">Balancing left and right hemispheres of the brain. Excellent before studying or presentations.</p>
         <div class="btn btn-primary" style="width: 100%;">Start Breathing</div>
       </div>
 
       <!-- Grounding: 5-4-3-2-1 -->
       <div class="exercise-card theme-anxiety" data-theme="anxiety" data-category="anxiety stress" onclick="openGroundingModal('54321')">
-        <span class="ex-badge">Anxiety Relief</span>
-        <h3 class="ex-title">5-4-3-2-1 Grounding</h3>
-        <p class="ex-desc">A sensory exercise to pull your mind away from anxious thoughts and ground you in the
-          physical world.</p>
+        <span class="ex-badge">Panic & Overwhelm</span>
+        <h3 class="ex-title">5-4-3-2-1 Sensory Reset</h3>
+        <p class="ex-desc">The ultimate grounding technique for panic attacks. Engage your five senses to pull your mind
+          back to the present.</p>
         <div class="btn btn-secondary" style="width: 100%;">Begin Exercise</div>
       </div>
 
@@ -404,6 +401,75 @@
         <h3 class="ex-title">Body Scan Meditation</h3>
         <p class="ex-desc">A guided journey through your body to notice tension and consciously relax each part for better sleep.</p>
         <div class="btn btn-secondary" style="width: 100%;">Begin Exercise</div>
+      </div>
+    </div>
+
+    <!-- Interactive Mindshift Flashcard Deck (Hidden by default until Flashcards tab selected) -->
+    <div id="flashcard-deck-section" class="flashcard-deck-container" style="display: none;">
+      <div class="flashcard-header-bar">
+        <span id="flashcard-category-pill" class="fc-category-pill">IMPOSTER SYNDROME</span>
+        <span class="fc-deck-label">🧠 CBT Cognitive Reframing</span>
+      </div>
+
+      <div class="flashcard-wrapper card-theme-violet" id="flashcard-card-wrapper" onclick="toggleFlashcardFlip()">
+        <!-- Front Face (Anxious/Overthinking Thought) -->
+        <div class="flashcard-face flashcard-front">
+          <div class="fc-orb fc-orb-top"></div>
+          <div class="fc-orb fc-orb-bottom"></div>
+          
+          <div class="fc-face-header">
+            <span class="fc-status-badge front-status">🌩️ LATE-NIGHT THOUGHT</span>
+            <span class="fc-flip-icon">Tap to Flip 🔄</span>
+          </div>
+
+          <div class="fc-content-body">
+            <p class="flashcard-text" id="flashcard-front-text">"Everyone else has their life figured out except me."</p>
+          </div>
+
+          <div class="fc-face-footer">
+            <span class="fc-hint-pill">✨ Click card to flip perspective</span>
+          </div>
+        </div>
+
+        <!-- Back Face (Calm CBT Reframe) -->
+        <div class="flashcard-face flashcard-back">
+          <div class="fc-orb fc-orb-top"></div>
+          <div class="fc-orb fc-orb-bottom"></div>
+
+          <div class="fc-face-header">
+            <span class="fc-status-badge back-status">🌟 PERSPECTIVE SHIFT</span>
+            <span class="fc-flip-icon">Tap to Flip 🔄</span>
+          </div>
+
+          <div class="fc-content-body">
+            <p class="flashcard-text" id="flashcard-back-text">"People only display their highlights, not their doubts. You are growing at exactly the right pace for your unique journey."</p>
+          </div>
+
+          <div class="fc-tip-box" id="flashcard-tip-box">
+            <span id="flashcard-tip-text">💡 Action: Take a deep breath and name 1 thing you completed today.</span>
+          </div>
+
+          <div class="fc-face-footer">
+            <span class="fc-hint-pill back-hint">💚 Breathe in peace...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Bar & Navigation -->
+      <div class="fc-progress-container">
+        <div class="fc-progress-bar">
+          <div class="fc-progress-fill" id="flashcard-progress-fill" style="width: 12.5%;"></div>
+        </div>
+      </div>
+
+      <div class="flashcard-controls">
+        <button class="flashcard-nav-btn" onclick="prevFlashcard(event)">
+          <span>←</span> Previous Card
+        </button>
+        <span class="flashcard-counter" id="flashcard-counter">1 / 8</span>
+        <button class="flashcard-nav-btn fc-btn-primary" onclick="nextFlashcard(event)">
+          Next Card <span>→</span>
+        </button>
       </div>
     </div>
   </main>

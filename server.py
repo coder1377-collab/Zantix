@@ -8,7 +8,11 @@ import os
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import google.generativeai as genai
-
+# pyrefly: ignore [missing-import]
+from pymongo import MongoClient
+# pyrefly: ignore [missing-import]
+from bson import ObjectId
+from datetime import datetime
 app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
 
@@ -31,10 +35,24 @@ def load_env_file(path='.env'):
 load_env_file()
 
 # Set your Gemini API key in .env or via environment variable.
-API_KEY = os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY')
+API_KEY = os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY') or 'AQ.Ab8RN6JpMmalQK2b5WjeJ4nhHNqTNzTBFzQIMRtvuTyMZwz4LQ'
 API_KEY_CONFIGURED = bool(API_KEY and API_KEY != 'PASTE_YOUR_GEMINI_API_KEY_HERE')
 
 genai.configure(api_key=API_KEY)
+
+# ─── MONGODB CONFIGURATION ───
+MONGO_URI = os.environ.get('MONGO_URI') or 'mongodb://localhost:27017/'
+try:
+    mongo_client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+    db = mongo_client.zantix
+    mood_collection = db.mood_logs
+    community_collection = db.community_posts
+    mongo_client.server_info()  # trigger connection test
+    MONGO_CONFIGURED = True
+except Exception as e:
+    MONGO_CONFIGURED = False
+    print(f"⚠️  WARNING: Could not connect to MongoDB at {MONGO_URI}")
+    print(f"   Error: {e}")
 
 # ─── SYSTEM PROMPT ───
 SYSTEM_PROMPT = """You are "Your Dost" — a warm, empathetic, and supportive AI mental wellness companion on the Zantix platform.
@@ -112,6 +130,103 @@ def serve_relax():
     return send_from_directory('.', 'relax.html')
 
 
+# ─── COMMUNITY API ROUTES ───
+
+@app.route('/api/community/posts', methods=['GET'])
+def get_community_posts():
+    if not MONGO_CONFIGURED:
+        return jsonify([])
+    posts = list(community_collection.find().sort('timestamp', -1))
+    for p in posts:
+        p['_id'] = str(p['_id'])
+        for r in p.get('replies', []):
+            if '_id' in r:
+                r['_id'] = str(r['_id'])
+    return jsonify(posts)
+
+@app.route('/api/community/posts', methods=['POST'])
+def create_community_post():
+    if not MONGO_CONFIGURED:
+        return jsonify({'error': 'MongoDB not configured'}), 500
+    data = request.get_json()
+    new_post = {
+        'authorAvatar': data.get('authorAvatar', 'A'),
+        'topic': data.get('topic', 'General'),
+        'title': data.get('title', ''),
+        'body': data.get('body', ''),
+        'timestamp': datetime.utcnow().isoformat() + 'Z',
+        'upvotes': 0,
+        'replies': []
+    }
+    result = community_collection.insert_one(new_post)
+    new_post['_id'] = str(result.inserted_id)
+    return jsonify(new_post)
+
+@app.route('/api/community/posts/<post_id>/reply', methods=['POST'])
+def add_reply(post_id):
+    if not MONGO_CONFIGURED:
+        return jsonify({'error': 'MongoDB not configured'}), 500
+    data = request.get_json()
+    reply = {
+        '_id': str(ObjectId()),
+        'authorAvatar': data.get('authorAvatar', 'A'),
+        'body': data.get('body', ''),
+        'timestamp': datetime.utcnow().isoformat() + 'Z'
+    }
+    community_collection.update_one(
+        {'_id': ObjectId(post_id)},
+        {'$push': {'replies': reply}}
+    )
+    return jsonify(reply)
+
+@app.route('/api/community/posts/<post_id>/upvote', methods=['POST'])
+def upvote_post(post_id):
+    if not MONGO_CONFIGURED:
+        return jsonify({'error': 'MongoDB not configured'}), 500
+    community_collection.update_one(
+        {'_id': ObjectId(post_id)},
+        {'$inc': {'upvotes': 1}}
+    )
+    return jsonify({'status': 'success'})
+
+# ─── MOOD TRACKER API ROUTES ───
+
+@app.route('/api/mood', methods=['GET'])
+def get_mood_logs():
+    if not MONGO_CONFIGURED:
+        return jsonify([])
+    user_id = request.headers.get('X-User-Id')
+    if not user_id:
+        return jsonify({'error': 'Missing user_id'}), 400
+    logs = list(mood_collection.find({'user_id': user_id}, {'_id': 0, 'user_id': 0}))
+    return jsonify(logs)
+
+@app.route('/api/mood', methods=['POST'])
+def save_mood_logs():
+    if not MONGO_CONFIGURED:
+        return jsonify({'error': 'MongoDB not configured'}), 500
+    user_id = request.headers.get('X-User-Id')
+    if not user_id:
+        return jsonify({'error': 'Missing user_id'}), 400
+    
+    data = request.get_json()
+    if isinstance(data, list):
+        mood_collection.delete_many({'user_id': user_id})
+        if data:
+            for item in data:
+                item['user_id'] = user_id
+            mood_collection.insert_many(data)
+            # Remove user_id before returning to match expected frontend structure
+            for item in data:
+                if '_id' in item:
+                    del item['_id']
+                if 'user_id' in item:
+                    del item['user_id']
+        return jsonify({'status': 'success'})
+    else:
+        return jsonify({'error': 'Expected a list of logs'}), 400
+
+
 @app.route('/api/chat', methods=['POST'])
 def chat():
     """
@@ -187,6 +302,12 @@ if __name__ == '__main__':
         print("   Or set it via: export GEMINI_API_KEY='your-key'")
     else:
         print("✅ Gemini API key configured")
+        
+    if not MONGO_CONFIGURED:
+        print("⚠️  WARNING: MongoDB is not connected!")
+        print("   Please check your MONGO_URI in .env")
+    else:
+        print("✅ MongoDB connected successfully")
 
     print(f"\n🚀 Server starting on http://localhost:5001")
     print(f"   Landing page:  http://localhost:5001/")

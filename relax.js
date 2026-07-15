@@ -12,31 +12,36 @@ const breatheModal = document.getElementById('breathe-modal');
 const breatheTitle = document.getElementById('breathe-title');
 const breatheSubtitle = document.getElementById('breathe-subtitle');
 
-// Setup Filter Tabs
+// Setup Main Section Tabs (Activities vs Flashcards)
 document.addEventListener('DOMContentLoaded', () => {
   const filterBtns = document.querySelectorAll('.filter-btn');
-  const exerciseCards = document.querySelectorAll('.exercise-card');
+  const relaxGrid = document.getElementById('relax-grid');
+  const flashcardDeckSection = document.getElementById('flashcard-deck-section');
 
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      // Remove active from all
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       
-      const filter = btn.getAttribute('data-filter');
+      const section = btn.getAttribute('data-section');
       
-      exerciseCards.forEach(card => {
-        const categories = card.getAttribute('data-category') || '';
-        if (filter === 'all' || categories.includes(filter)) {
-          card.classList.remove('hidden');
-          // Reset animation by removing and adding element
-          card.style.animation = 'none';
-          card.offsetHeight; /* trigger reflow */
-          card.style.animation = 'fadeUp 0.6s ease both';
-        } else {
-          card.classList.add('hidden');
+      if (section === 'flashcards') {
+        if (relaxGrid) relaxGrid.style.display = 'none';
+        if (flashcardDeckSection) {
+          flashcardDeckSection.style.display = 'block';
+          flashcardDeckSection.style.animation = 'none';
+          flashcardDeckSection.offsetHeight;
+          flashcardDeckSection.style.animation = 'fadeUp 0.5s ease both';
         }
-      });
+      } else {
+        if (flashcardDeckSection) flashcardDeckSection.style.display = 'none';
+        if (relaxGrid) {
+          relaxGrid.style.display = 'grid';
+          relaxGrid.style.animation = 'none';
+          relaxGrid.offsetHeight;
+          relaxGrid.style.animation = 'fadeUp 0.5s ease both';
+        }
+      }
     });
   });
 });
@@ -291,3 +296,141 @@ function closeGroundingModal() {
   Object.values(pmrTimers).forEach(timer => clearInterval(timer));
   pmrTimers = {};
 }
+
+// ─── CBT MINDSHIFT FLASHCARDS DECK (COLORFUL PREMIUM EDITION) ───
+const flashcardsDeck = [
+  {
+    category: "IMPOSTER SYNDROME",
+    themeClass: "card-theme-violet",
+    front: "Everyone else has their life figured out except me.",
+    back: "People only display their highlights, not their doubts. You are growing at exactly the right pace for your unique journey.",
+    tip: "💡 Action: Take a slow breath and name 1 thing you completed today."
+  },
+  {
+    category: "EXAM & PERFORMANCE PANIC",
+    themeClass: "card-theme-coral",
+    front: "I'm going to fail or mess everything up.",
+    back: "One exam, presentation, or difficult week is a single page in your book—not the whole title. You have survived 100% of your hardest days so far.",
+    tip: "💡 Action: Focus only on the next 15 minutes right now."
+  },
+  {
+    category: "GUILT OVER REST",
+    themeClass: "card-theme-emerald",
+    front: "I should be working harder instead of resting right now.",
+    back: "Rest is not a reward you have to earn through exhaustion. Rest is essential fuel for your brain and mental well-being.",
+    tip: "💡 Action: Drop your shoulders away from your ears & take a sip of water."
+  },
+  {
+    category: "LATE-NIGHT LONELINESS",
+    themeClass: "card-theme-indigo",
+    front: "I feel completely alone with what I am carrying.",
+    back: "Loneliness lies and tells you nobody understands. Right now, thousands of students are awake feeling this exact same weight. You belong.",
+    tip: "💡 Action: Put your hand over your chest and feel its steady beat."
+  },
+  {
+    category: "CAREER & FUTURE ANXIETY",
+    themeClass: "card-theme-amber",
+    front: "What if I make the wrong career or life choice?",
+    back: "No choice is permanent. Every path teaches you something valuable. You are allowed to pivot, experiment, and redefine your direction.",
+    tip: "💡 Action: Remember that your 20s are for experimenting, not perfection."
+  },
+  {
+    category: "SELF-DOUBT & BELONGING",
+    themeClass: "card-theme-violet",
+    front: "I feel like an imposter who doesn't belong here.",
+    back: "Imposter syndrome only happens to people who are actively pushing their comfort zone. Feeling unsure means you are growing.",
+    tip: "💡 Action: Remind yourself out loud: 'I earned my place here.'"
+  },
+  {
+    category: "PROCRASTINATION PARALYSIS",
+    themeClass: "card-theme-emerald",
+    front: "I wasted too much time and it's too late to catch up.",
+    back: "The next hour is completely yours. Start with just 10 minutes on one small task without judging the past.",
+    tip: "💡 Action: Set a 10-minute timer and start one small step."
+  },
+  {
+    category: "SPIRALING THOUGHTS",
+    themeClass: "card-theme-cyan",
+    front: "My anxiety means something terrible is about to happen.",
+    back: "Anxiety is a false alarm from a tired nervous system—not a prophecy. Notice the alarm, take a deep breath, and let it pass.",
+    tip: "💡 Action: Do one cycle of 4-7-8 breathing right now."
+  }
+];
+
+let currentFlashcardIndex = 0;
+
+function updateFlashcardUI() {
+  const wrapper = document.getElementById('flashcard-card-wrapper');
+  const frontEl = document.getElementById('flashcard-front-text');
+  const backEl = document.getElementById('flashcard-back-text');
+  const counterEl = document.getElementById('flashcard-counter');
+  const categoryPill = document.getElementById('flashcard-category-pill');
+  const tipText = document.getElementById('flashcard-tip-text');
+  const progressFill = document.getElementById('flashcard-progress-fill');
+
+  if (!frontEl || !backEl) return;
+
+  const card = flashcardsDeck[currentFlashcardIndex];
+  frontEl.textContent = `"${card.front}"`;
+  backEl.textContent = `"${card.back}"`;
+
+  if (categoryPill) {
+    categoryPill.textContent = card.category;
+  }
+  if (tipText) {
+    tipText.textContent = card.tip || "💡 Take one deep mindful breath.";
+  }
+  if (wrapper && card.themeClass) {
+    // Remove all card themes then add active theme
+    wrapper.classList.remove('card-theme-violet', 'card-theme-coral', 'card-theme-emerald', 'card-theme-indigo', 'card-theme-amber', 'card-theme-cyan');
+    wrapper.classList.add(card.themeClass);
+  }
+  if (counterEl) {
+    counterEl.textContent = `${currentFlashcardIndex + 1} / ${flashcardsDeck.length}`;
+  }
+  if (progressFill) {
+    const percent = ((currentFlashcardIndex + 1) / flashcardsDeck.length) * 100;
+    progressFill.style.width = `${percent}%`;
+  }
+}
+
+function toggleFlashcardFlip() {
+  const wrapper = document.getElementById('flashcard-card-wrapper');
+  if (wrapper) {
+    wrapper.classList.toggle('is-flipped');
+  }
+}
+
+function nextFlashcard(event) {
+  if (event) event.stopPropagation();
+  const wrapper = document.getElementById('flashcard-card-wrapper');
+  if (wrapper) wrapper.classList.remove('is-flipped');
+
+  setTimeout(() => {
+    currentFlashcardIndex = (currentFlashcardIndex + 1) % flashcardsDeck.length;
+    updateFlashcardUI();
+  }, 120);
+}
+
+function prevFlashcard(event) {
+  if (event) event.stopPropagation();
+  const wrapper = document.getElementById('flashcard-card-wrapper');
+  if (wrapper) wrapper.classList.remove('is-flipped');
+
+  setTimeout(() => {
+    currentFlashcardIndex = (currentFlashcardIndex - 1 + flashcardsDeck.length) % flashcardsDeck.length;
+    updateFlashcardUI();
+  }, 120);
+}
+
+function scrollToFlashcardsSection() {
+  const section = document.getElementById('flashcard-deck-section');
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateFlashcardUI();
+});
+

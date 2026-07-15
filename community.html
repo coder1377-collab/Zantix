@@ -54,53 +54,40 @@
       <div class="glow-blob blob-teal"></div>
     </div>
 
-    <section class="community-shell">
-      <aside class="community-sidebar">
-        <div class="section-label">Anonymous Community</div>
-        <h1 class="community-heading">Ask, answer, and feel less alone.</h1>
-        <p class="community-intro">A quiet feed for honest questions, stories, and supportive replies. No names, no pressure.</p>
-        
-        <!-- Live Search Box -->
-        <div class="search-box-wrap">
-          <input id="community-search" class="community-search-input" type="text" placeholder="🔍 Search posts..." aria-label="Search community posts">
+    <!-- REDDIT / QUORA STYLE COMMUNITY HEADER CARD -->
+    <section class="reddit-header-card">
+      <div class="reddit-header-left">
+        <div class="reddit-comm-avatar">🌿</div>
+        <div class="reddit-comm-info">
+          <div class="reddit-comm-title-row">
+            <h1 class="reddit-comm-name">r/ZantixSanctuary</h1>
+            <span class="reddit-verified-badge" title="Official Verified Community">✓</span>
+          </div>
+          <p class="reddit-comm-sub">The #1 Anonymous Student Support & Empathy Community • Inspired by Reddit & Quora</p>
         </div>
-
-        <div class="topic-list" aria-label="Community topics">
-          <button class="topic-pill pill-all active" type="button">All</button>
-          <button class="topic-pill pill-exam-stress" type="button">Exam Stress</button>
-          <button class="topic-pill pill-loneliness" type="button">Loneliness</button>
-          <button class="topic-pill pill-family" type="button">Family</button>
-          <button class="topic-pill pill-career" type="button">Career</button>
-          <button class="topic-pill pill-general" type="button">General</button>
+      </div>
+      <div class="reddit-header-actions">
+        <div class="reddit-online-pill">
+          <span class="pulse-dot"></span>
+          <strong>14.8k</strong> Anons Online
         </div>
+        <button id="reddit-join-btn" class="reddit-join-btn active" type="button">✓ Joined</button>
+        <button class="reddit-share-btn" type="button" title="Share Community">↗ Share</button>
+      </div>
+    </section>
 
-        <div class="community-download-panel" aria-label="Download community archive">
-          <div class="download-dost-header">
-            <div class="download-dost-avatar" aria-hidden="true">🤖</div>
-            <div>
-              <strong>Save with Dost</strong>
-              <span>Anonymous archive</span>
+    <!-- MAIN REDDIT / QUORA GRID LAYOUT: FEED LEFT, SIDEBAR RIGHT -->
+    <section class="reddit-layout-shell">
+      <!-- LEFT COLUMN: MAIN FEED & COMPOSER -->
+      <div class="reddit-feed-col">
+        <!-- Reddit style quick post bar / expandable composer -->
+        <form id="community-compose" class="community-composer reddit-composer-box">
+          <div class="composer-top-bar">
+            <div class="composer-author-pill">
+              <span class="composer-anon-icon">🎭</span>
+              <span>Posting as <strong>Anonymous Student</strong></span>
             </div>
-          </div>
-          <div class="download-emoji-row" aria-hidden="true">
-            <span>💚</span>
-            <span>🔒</span>
-            <span>💬</span>
-            <span>✨</span>
-          </div>
-          <button id="community-download" class="download-feed-btn" type="button" aria-label="Download all community posts">
-            <span aria-hidden="true">📥</span>
-            Download Feed
-          </button>
-          <span id="community-download-status" class="download-status" aria-live="polite"></span>
-        </div>
-      </aside>
-
-      <div class="community-feed">
-        <form id="community-compose" class="community-composer">
-          <div class="composer-top">
-            <div class="avatar av1">A</div>
-            <select id="community-topic" class="community-select" aria-label="Choose topic">
+            <select id="community-topic" class="community-select" aria-label="Choose post flair/topic">
               <option>Exam Stress</option>
               <option>Loneliness</option>
               <option>Family</option>
@@ -108,24 +95,140 @@
               <option>General</option>
             </select>
           </div>
-          <input id="community-title" class="community-title-input" type="text" placeholder="Ask a question or name what happened">
-          <textarea id="community-body" class="community-body-input" rows="4" placeholder="Share anonymously. Keep it respectful and real."></textarea>
+
+          <input id="community-title" class="community-title-input" type="text" placeholder="Title — Ask a question or share your story anonymously..." required>
+          <textarea id="community-body" class="community-body-input" rows="3" placeholder="Elaborate on your thoughts... No real names, 100% confidential peer support." required></textarea>
+
           <div class="composer-actions">
-            <span id="community-compose-status" class="composer-status">Posts stay in this browser for now.</span>
-            <button class="btn btn-primary" type="submit">Post</button>
+            <div class="composer-flair-tags">
+              <span class="flair-hint">🏷️ Flair Tag Required</span>
+              <span id="community-compose-status" class="composer-status">🔒 256-bit Encrypted & Anonymous</span>
+            </div>
+            <button class="btn btn-primary composer-submit-btn" type="submit">
+              <span>Post to r/ZantixSanctuary ✨</span>
+            </button>
           </div>
         </form>
 
-        <div class="feed-sort">
-          <button class="sort-chip active" type="button">Top</button>
-          <button class="sort-chip" type="button">New</button>
-          <button class="sort-chip" type="button">Unanswered</button>
+        <!-- Feed Sorting Bar (Hot / New / Unanswered) -->
+        <div class="feed-sort-bar reddit-sort-bar">
+          <div class="feed-sort">
+            <button class="sort-chip active" data-sort="Top" type="button">🔥 Hot & Top</button>
+            <button class="sort-chip" data-sort="New" type="button">✨ Newest</button>
+            <button class="sort-chip" data-sort="Unanswered" type="button">💬 Unanswered</button>
+          </div>
+          <div class="search-box-wrap feed-search-wrap">
+            <input id="community-search" class="community-search-input feed-search-input" type="text" placeholder="🔍 Search r/ZantixSanctuary..." aria-label="Search posts">
+          </div>
         </div>
 
+        <!-- Discussion Posts Feed -->
         <div id="community-posts" class="discussion-list">
           <!-- Injected dynamically by JavaScript -->
         </div>
       </div>
+
+      <!-- RIGHT COLUMN: REDDIT / QUORA WIDGET SIDEBAR -->
+      <aside class="reddit-sidebar-col">
+        <!-- About Community Widget -->
+        <div class="comm-sidebar-card reddit-widget about-widget">
+          <div class="reddit-widget-header">
+            <h3>About Community</h3>
+          </div>
+          <p class="about-widget-desc">
+            Welcome to <strong>r/ZantixSanctuary</strong> — a Reddit & Quora styled anonymous safe haven for students to share midnight thoughts, ask emotional questions, and receive judgment-free advice.
+          </p>
+          <div class="about-stats-grid">
+            <div class="about-stat-box">
+              <strong>48.2k</strong>
+              <span>Members</span>
+            </div>
+            <div class="about-stat-box">
+              <strong>14.8k</strong>
+              <span>Online Now</span>
+            </div>
+            <div class="about-stat-box">
+              <strong>Top 1%</strong>
+              <span>Empathetic Space</span>
+            </div>
+          </div>
+          <div class="about-meta-row">
+            <span>🎂 Created July 2026</span>
+            <span>🌿 Public & Anonymous</span>
+          </div>
+        </div>
+
+        <!-- Flair / Topic Filter Widget -->
+        <div class="comm-sidebar-card reddit-widget topics-widget">
+          <div class="reddit-widget-header">
+            <h3>Filter by Flair / Topic</h3>
+          </div>
+          <div class="topic-list" aria-label="Community topics">
+            <button class="topic-pill pill-all active" data-topic="All" type="button">✨ All Stories</button>
+            <button class="topic-pill pill-exam-stress" data-topic="Exam Stress" type="button">⚡ Exam Stress</button>
+            <button class="topic-pill pill-loneliness" data-topic="Loneliness" type="button">🌌 Loneliness</button>
+            <button class="topic-pill pill-family" data-topic="Family" type="button">❤️ Family</button>
+            <button class="topic-pill pill-career" data-topic="Career" type="button">🧭 Career</button>
+            <button class="topic-pill pill-general" data-topic="General" type="button">🌱 General</button>
+          </div>
+        </div>
+
+        <!-- Community Guidelines / Rules Widget -->
+        <div class="comm-sidebar-card reddit-widget rules-widget">
+          <div class="reddit-widget-header">
+            <h3>r/ZantixSanctuary Rules</h3>
+          </div>
+          <ul class="reddit-rules-list">
+            <li>
+              <strong>1. 100% Anonymous & Confidential</strong>
+              <span>Do not post personally identifiable info (PII) of yourself or others.</span>
+            </li>
+            <li>
+              <strong>2. Lead with Empathy</strong>
+              <span>Remember there is a real student behind every story. Be supportive.</span>
+            </li>
+            <li>
+              <strong>3. No Judgment or Bullying</strong>
+              <span>Zero tolerance for harassment, hate speech, or academic shaming.</span>
+            </li>
+            <li>
+              <strong>4. Upvote Supportive Replies</strong>
+              <span>Reward peer listeners with Virtual Hugs & Upvotes.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Wishing Well Support Widget -->
+        <div class="comm-sidebar-card reddit-widget wishing-well-card">
+          <div class="wishing-well-header">
+            <span class="ww-icon">🏮</span>
+            <div>
+              <strong>Sanctuary Wishing Well</strong>
+              <span>Late night peer comfort</span>
+            </div>
+          </div>
+          <p class="ww-desc">"To whoever is reading this at 2 AM: your grades do not define your worth. Keep breathing, you got this."</p>
+          <div class="ww-footer">
+            <span class="ww-badge">💚 Verified Empathy</span>
+          </div>
+        </div>
+
+        <!-- Offline Archive Widget -->
+        <div class="community-download-panel" aria-label="Download community archive">
+          <div class="download-dost-header">
+            <div class="download-dost-avatar" aria-hidden="true">🤖</div>
+            <div>
+              <strong>Archive with Dost</strong>
+              <span>Save feed for offline reading</span>
+            </div>
+          </div>
+          <button id="community-download" class="download-feed-btn" type="button" aria-label="Download all community posts">
+            <span aria-hidden="true">📥</span>
+            Download Feed PDF / JSON
+          </button>
+          <span id="community-download-status" class="download-status" aria-live="polite"></span>
+        </div>
+      </aside>
     </section>
   </main>
 
